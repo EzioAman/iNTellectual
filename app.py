@@ -117,9 +117,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="valorant-title">Game Drifters</div>', unsafe_allow_html=True)
-st.markdown('<div class="valorant-sub">Valorant Team</div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-sub">Valorant Roster</div>', unsafe_allow_html=True)
 st.markdown('<div class="valorant-line"></div>', unsafe_allow_html=True)
-st.markdown('<div class="valorant-tag">Performance Analytics</div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-tag">Members Performance Analytics</div>', unsafe_allow_html=True)
 
 # =========================================================
 # DATA
@@ -276,6 +276,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
