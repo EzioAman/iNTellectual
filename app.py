@@ -40,10 +40,24 @@ border-radius:8px;padding:18px;margin-bottom:18px;backdrop-filter:blur(6px);}
 .section-title{font-size:18px;color:#ff4655;margin-bottom:14px;font-weight:700;}
 .rankrow{display:flex;align-items:center;gap:14px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.03);border-radius:6px}
 .rankrow img{height:46px;border-radius:4px}
+.glow-title {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow:
+        0 0 5px #ff4655,
+        0 0 10px #ff4655,
+        0 0 20px #ff4655,
+        0 0 40px #ff1e38;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='color:white'>Game Drifters Valorant Team</h1>", unsafe_allow_html=True)
+st.markdown('<div class="glow-title">Game Drifters Valorant Team</div>', unsafe_allow_html=True)
 
 # =========================================================
 # DATA
@@ -200,6 +214,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
