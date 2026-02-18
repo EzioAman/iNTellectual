@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import base64
 from pathlib import Path
 
-st.set_page_config(page_title="Team iNTellectual", layout="wide")
+st.set_page_config(page_title="Game Drifters Valorant Team", layout="wide")
 
 # =========================================================
 # BACKGROUND
@@ -174,3 +174,4 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
