@@ -35,29 +35,91 @@ set_background()
 # =========================================================
 st.markdown("""
 <style>
-.card{background:rgba(20,20,25,.65);border:1px solid rgba(255,70,85,.4);
-border-radius:8px;padding:18px;margin-bottom:18px;backdrop-filter:blur(6px);}
-.section-title{font-size:18px;color:#ff4655;margin-bottom:14px;font-weight:700;}
-.rankrow{display:flex;align-items:center;gap:14px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.03);border-radius:6px}
-.rankrow img{height:46px;border-radius:4px}
-.glow-title {
-    font-size: 52px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: #ffffff;
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@600;700&display=swap');
+
+.card{
+    background:rgba(20,20,25,.65);
+    border:1px solid rgba(255,70,85,.4);
+    border-radius:8px;
+    padding:18px;
+    margin-bottom:18px;
+    backdrop-filter:blur(6px);
+}
+
+.section-title{
+    font-size:18px;
+    color:#ff4655;
+    margin-bottom:14px;
+    font-weight:700;
+}
+
+.rankrow{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:10px;
+    margin-bottom:8px;
+    background:rgba(255,255,255,.03);
+    border-radius:6px
+}
+
+.rankrow img{
+    height:46px;
+    border-radius:4px
+}
+
+/* ===== VALORANT HEADER ===== */
+
+.valorant-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: 8px;
     text-align: center;
-    margin-bottom: 25px;
+    text-transform: uppercase;
+    margin-top: 30px;
+
+    background: linear-gradient(180deg, #ffffff 0%, #ffb3b8 40%, #ff4655 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
     text-shadow:
-        0 0 5px #ff4655,
-        0 0 10px #ff4655,
-        0 0 20px #ff4655,
-        0 0 40px #ff1e38;
+        0 0 8px rgba(255,70,85,0.5),
+        0 0 20px rgba(255,70,85,0.25);
+}
+
+.valorant-sub {
+    font-family: 'Teko', sans-serif;
+    font-size: 44px;
+    letter-spacing: 6px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ff4655;
+    margin-top: -25px;
+}
+
+.valorant-line {
+    width: 160px;
+    height: 3px;
+    margin: 20px auto;
+    background: linear-gradient(to right, transparent, #ff4655, transparent);
+}
+
+.valorant-tag {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="glow-title">Game Drifters Valorant Team</div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-title">Game Drifters</div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-sub">Valorant Team</div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-line"></div>', unsafe_allow_html=True)
+st.markdown('<div class="valorant-tag">Radiant Tier Performance Analytics</div>', unsafe_allow_html=True)
 
 # =========================================================
 # DATA
@@ -214,6 +276,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
