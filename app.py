@@ -43,7 +43,7 @@ border-radius:8px;padding:18px;margin-bottom:18px;backdrop-filter:blur(6px);}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='color:white'>TEAM iNTELLECTUAL</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:white'>Game Drifters Valorant Team</h1>", unsafe_allow_html=True)
 
 # =========================================================
 # DATA
@@ -174,4 +174,5 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
