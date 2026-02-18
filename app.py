@@ -101,7 +101,7 @@ def gauge(title,value):
         mode="gauge+number",
         value=float(value),
         number={'suffix':" /10",'font':{'size':34}},
-        title={'text':title,'font':{'color':'#ff4655'}},
+        title={'text':title,'font':{'size':13,'color':'#ff4655'}},
         gauge={'axis':{'range':[0,10]},'bar':{'color':'#ff4655'}}
     ))
     fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",height=300)
@@ -174,5 +174,6 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
