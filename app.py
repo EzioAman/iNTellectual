@@ -300,8 +300,9 @@ if st.button("Update Stats"):
         "https://www.googleapis.com/auth/drive"
     ]
 
-    creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "service_account.json", scope
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(
+        st.secrets["gcp_service_account"],
+        scope
     )
 
     client = gspread.authorize(creds)
@@ -501,3 +502,4 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
