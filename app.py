@@ -3,8 +3,14 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+import requests
 import base64
+import time
 from pathlib import Path
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+API_KEY = st.secrets["API_KEY"]
+
 
 st.set_page_config(page_title="Game Drifters Valorant Team", layout="wide")
 
@@ -122,18 +128,237 @@ st.markdown('<div class="valorant-line"></div>', unsafe_allow_html=True)
 st.markdown('<div class="valorant-tag">Members Performance Analytics</div>', unsafe_allow_html=True)
 
 # =========================================================
+# Tracker Data
+# =========================================================
+
+def fetch_tracker_stats(riot_id):
+
+    try:
+        name, tag = riot_id.split("#")
+        name = name.strip().lower()
+        tag = tag.strip().lower()
+
+        headers = {"Authorization": API_KEY}
+
+        # ---------- GET REGION ----------
+        acc_url = f"https://api.henrikdev.xyz/valorant/v1/account/{name}/{tag}"
+        acc = requests.get(acc_url, headers=headers)
+
+        if acc.status_code != 200:
+            return None
+
+        account = acc.json()["data"]
+
+        region = account["region"]
+        player_puuid = account["puuid"]
+
+        # ---------- GET MATCHES ----------
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}"
+        r = requests.get(url, headers=headers)
+
+        if r.status_code != 200:
+            return None
+
+        matches = r.json()["data"]
+
+        # ===== TOTAL ACCUMULATORS =====
+        total_kills = 0
+        total_deaths = 0
+        total_assists = 0
+        total_headshots = 0
+        total_shots = 0
+        total_score = 0
+        total_rounds = 0
+        games = 0
+        competitive_games = 0
+
+        for match in matches:
+
+            metadata = match["metadata"]
+
+            queue = str(metadata.get("queue", "")).lower()
+            mode  = str(metadata.get("mode", "")).lower()
+
+            # TRUE competitive detection
+            is_comp = any(x in (queue + mode) for x in [
+                "competitive",
+                "ranked",
+                "comp"
+            ])
+
+            # skip non competitive
+            if not is_comp:
+                continue
+
+            rounds = max(1, metadata.get("rounds_played", 1))
+
+            for p in match["players"]["all_players"]:
+
+                if p.get("puuid") != player_puuid:
+                    continue
+
+                stats = p["stats"]
+
+                kills   = stats["kills"]
+                deaths  = stats["deaths"]
+                assists = stats["assists"]
+
+                headshots = stats["headshots"]
+                body      = stats["bodyshots"]
+                legs      = stats["legshots"]
+
+                total_kills += kills
+                total_deaths += deaths
+                total_assists += assists
+
+                total_headshots += headshots
+                total_shots += headshots + body + legs
+
+                total_score += (kills * 150) + (assists * 50)
+                total_rounds += rounds
+
+                competitive_games += 1
+                break
+
+            if competitive_games >= 10:
+                break
+
+        if competitive_games == 0:
+            return None
+
+
+        # ===== FINAL STATS =====
+        KD  = total_kills / max(1, total_deaths)
+        ACS = total_score / max(1, total_rounds)
+        HS  = (total_headshots / max(1, total_shots)) * 100
+
+        return {
+            "KD": round(KD, 2),
+            "ACS": round(ACS, 1),
+            "HS%": round(HS, 1)
+        }
+
+    except Exception as e:
+        st.error(e)
+        return None
+
+# =========================================================
 # DATA
 # =========================================================
 SHEET_URL="https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/export?format=csv&gid=0"
 
 @st.cache_data(ttl=30)
+
+def clean_riot_id(player):
+
+    if pd.isna(player):
+        return None
+
+    player = str(player)
+
+    # remove weird unicode spaces
+    player = player.replace("\xa0", " ")
+
+    # normalize spacing
+    player = " ".join(player.split())
+
+    # remove space before #
+    player = player.replace(" #", "#")
+
+    return player.strip()
+
 def load():
-    df=pd.read_csv(SHEET_URL)
-    df.columns=df.columns.str.strip()
-    df["Date"]=pd.to_datetime(df["Date"],errors="coerce")
+
+    df = pd.read_csv(SHEET_URL)
+    df.columns = df.columns.str.strip()
+
+    # keep rows that look like Riot IDs
+    df = df[df["Player"].notna()]
+    df = df[df["Player"].astype(str).str.contains("#")]
+
+    # clean spaces around Riot IDs
+    df["Player"] = df["Player"].apply(clean_riot_id)
+
+    df["Date"] = pd.to_datetime(
+        df["Date"],
+        errors="coerce",
+        dayfirst=True
+    )
+
     return df.sort_values("Date")
 
 df=load()
+
+# =========================================================
+# UPDATE TRACKER BUTTON (SAFE BULK UPDATE)
+# =========================================================
+
+if st.button("Update Stats"):
+
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        "service_account.json", scope
+    )
+
+    client = gspread.authorize(creds)
+
+    sheet = client.open_by_key(
+        "1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0"
+    ).sheet1
+
+    rows = sheet.get_all_values()
+
+    header = rows[0]
+    player_col = header.index("Player")
+
+    batch_updates = []
+    updated = 0
+    processed = 0
+
+    for sheet_row, row in enumerate(rows[1:], start=2):
+
+        if len(row) <= player_col:
+            continue
+
+        riot_id = row[player_col].strip()
+
+        if "#" not in riot_id:
+            continue
+
+        st.write("Checking:", riot_id)
+
+        # ✅ REAL API CALL
+        stats = fetch_tracker_stats(riot_id)
+        processed += 1
+
+        if not stats:
+            st.warning(f"No recent match data → {riot_id}")
+        else:
+            batch_updates.append({
+                "range": f"J{sheet_row}:L{sheet_row}",
+                "values": [[
+                    stats["HS%"],
+                    stats["ACS"],
+                    stats["KD"]
+                ]]
+            })
+            updated += 1
+
+        # ✅ RATE LIMIT PROTECTION (ONLY AFTER CALLS)
+        if processed % 5 == 0:
+            with st.spinner("Cooling API requests..."):
+                time.sleep(41)
+
+
+    # ✅ ONE GOOGLE API UPDATE
+    if batch_updates:
+        sheet.batch_update(batch_updates)
+
+    st.success(f"{updated} players updated correctly ✅")
 
 # safe numeric conversion
 for col in df.columns:
@@ -185,10 +410,10 @@ def gauge(title,value):
 
 st.markdown('<div class="card"><div class="section-title">Player Analytics</div>',unsafe_allow_html=True)
 c1,c2,c3,c4=st.columns(4)
-c1.plotly_chart(gauge("Performance",career),use_container_width=True)
-c2.plotly_chart(gauge("Consistency",consistency),use_container_width=True)
-c3.plotly_chart(gauge("Form",form),use_container_width=True)
-c4.plotly_chart(gauge("Impact",impact),use_container_width=True)
+c1.plotly_chart(gauge("Performance",career),width="stretch")
+c2.plotly_chart(gauge("Consistency",consistency),width="stretch")
+c3.plotly_chart(gauge("Form",form),width="stretch")
+c4.plotly_chart(gauge("Impact",impact),width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
 
 # =========================================================
@@ -201,7 +426,7 @@ long=plot.melt(id_vars="Date",value_vars=metrics,var_name="Metric",value_name="S
 fig=px.line(long,x="Date",y="Score",color="Metric",markers=True)
 fig.update_yaxes(range=[0,10])
 fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",font_color="white")
-st.plotly_chart(fig,use_container_width=True)
+st.plotly_chart(fig,width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
 
 # =========================================================
@@ -210,7 +435,7 @@ st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Match Logs</div>',unsafe_allow_html=True)
 for d,g in pn.groupby(pn["Date"].dt.date):
     with st.expander(str(d)):
-        st.dataframe(g[["Role","Overall"]+metrics],use_container_width=True)
+        st.dataframe(g[["Role","Overall"]+metrics],width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
 
 # =========================================================
@@ -276,14 +501,3 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
