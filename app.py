@@ -352,7 +352,7 @@ if st.button("Update Stats"):
         # ✅ RATE LIMIT PROTECTION (ONLY AFTER CALLS)
         if processed % 4 == 0:
             with st.spinner("Cooling API requests..."):
-                time.sleep(55)
+                time.sleep(60)
 
 
     # ✅ ONE GOOGLE API UPDATE
@@ -502,6 +502,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
