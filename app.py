@@ -392,11 +392,40 @@ def rate(stat,val,role):  # CHANGED → added role parameter
 metrics=["Aim","Utility","Comms","Entry","Clutch","HS%","ACS","KD"]
 
 norm=df.copy()
+
 for m in metrics:
     if m in norm.columns:
         norm[m]=norm.apply(lambda r: rate(m, r[m], r["Role"]), axis=1)
 
-norm["Overall"]=norm[metrics].mean(axis=1)
+# ===== SPLIT METRICS =====
+coach_metrics = ["Aim","Utility","Comms","Entry","Clutch"]
+stat_metrics = ["HS%","ACS","KD"]
+
+norm["CoachScore"] = norm[coach_metrics].mean(axis=1)
+norm["StatScore"] = norm[stat_metrics].mean(axis=1)
+
+# ===== ROLE WEIGHTS =====
+ROLE_WEIGHTS = {
+    "Duelist": 0.40,
+    "Initiator": 0.35,
+    "Controller": 0.30,
+    "Sentinel": 0.30,
+    "IGL": 0.25
+}
+
+# ===== FINAL SCORE =====
+def final_score(row):
+
+    role = row["Role"]
+    stat_weight = ROLE_WEIGHTS.get(role,0.30)
+    coach_weight = 1 - stat_weight
+
+    return (
+        row["CoachScore"] * coach_weight +
+        row["StatScore"] * stat_weight
+    )
+
+norm["Overall"] = norm.apply(final_score,axis=1)
 
 # =========================================================
 # PLAYER
@@ -519,6 +548,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
