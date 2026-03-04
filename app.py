@@ -391,7 +391,7 @@ if st.button("Update Stats"):
         
             if player_row_found:
                 # overwrite today's entry
-                data_sheet.update(f"A{player_row_found}:G{player_row_found}", [history_data])
+                data_sheet.update(f"A{player_row_found}:L{player_row_found}", [history_data])
             else:
                 # append new day entry
                 data_sheet.append_row(history_data)
@@ -508,6 +508,135 @@ c4.plotly_chart(gauge("Impact",impact),width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
 
 # =========================================================
+# PRO ANALYTICS DASHBOARD
+# =========================================================
+
+st.markdown('<div class="card"><div class="section-title">Advanced Analytics</div>',unsafe_allow_html=True)
+
+# ==========================
+# PERFORMANCE TREND
+# ==========================
+trend = pn.sort_values("Date").tail(10)
+
+if not trend.empty:
+    fig_trend = px.line(
+        trend,
+        x="Date",
+        y="Overall",
+        markers=True,
+        line_shape="spline",
+        title="Performance Trend"
+    )
+    
+    fig_trend.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font_color="white",
+        yaxis=dict(range=[0,10])
+    )
+
+
+# ==========================
+# COACH METRICS CHART
+# ==========================
+coach_values = pn[coach_metrics].mean()
+
+fig_coach = px.bar(
+    x=coach_values.index,
+    y=coach_values.values,
+    labels={"x":"Metric","y":"Score"},
+    title="Coach Metrics"
+)
+
+fig_coach.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font_color="white",
+    yaxis=dict(range=[0,10])
+)
+
+
+# ==========================
+# MECHANICAL STATS
+# ==========================
+stat_values = pn[stat_metrics].mean()
+
+fig_mech = px.bar(
+    x=stat_values.index,
+    y=stat_values.values,
+    labels={"x":"Stat","y":"Score"},
+    title="Mechanical Stats"
+)
+
+fig_mech.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font_color="white",
+    yaxis=dict(range=[0,10])
+)
+
+
+# ==========================
+# PLAYER RADAR CHART
+# ==========================
+radar_metrics = coach_metrics + stat_metrics
+
+radar_values = pn[radar_metrics].mean()
+
+fig_radar = go.Figure()
+
+fig_radar.add_trace(go.Scatterpolar(
+    r=radar_values.values,
+    theta=radar_metrics,
+    fill="toself",
+    line_color="#ff4655"
+))
+
+fig_radar.update_layout(
+    polar=dict(radialaxis=dict(visible=True,range=[0,10])),
+    showlegend=False,
+    paper_bgcolor="rgba(0,0,0,0)",
+    font_color="white",
+    title="Player Radar"
+)
+
+# ==========================
+# ROLE COMPARISON
+# ==========================
+role_avg = norm.groupby("Role")["Overall"].mean().reset_index()
+
+fig_role = px.bar(
+    role_avg,
+    x="Role",
+    y="Overall",
+    title="Role Performance Comparison"
+)
+
+fig_role.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font_color="white",
+    yaxis=dict(range=[0,10])
+)
+
+# ===== DASHBOARD LAYOUT =====
+
+col1, col2 = st.columns(2)
+
+with col1:
+    if not trend.empty:
+        st.plotly_chart(fig_trend,width="stretch")
+    st.plotly_chart(fig_mech,width="stretch")
+
+with col2:
+    st.plotly_chart(fig_coach,width="stretch")
+    st.plotly_chart(fig_radar,width="stretch")
+
+st.plotly_chart(fig_role,width="stretch")
+
+st.markdown("</div>",unsafe_allow_html=True)
+
+# =========================================================
 # PERFORMANCE BREAKDOWN
 # =========================================================
 st.markdown('<div class="card"><div class="section-title">Performance Breakdown</div>',unsafe_allow_html=True)
@@ -516,10 +645,25 @@ plot = history[history["Player"] == player].sort_values("Date").tail(10)
 if plot.empty:
     st.info("No historical data yet. Press 'Update Stats' first.")
     st.stop()
-    
+
+# ===============================
+# NORMALIZE STATS TO 0-10 SCALE
+# ===============================
+plot = plot.copy()
+
+if "ACS" in plot.columns:
+    plot["ACS_norm"] = (plot["ACS"] / 300) * 10
+
+if "HS%" in plot.columns:
+    plot["HS_norm"] = (plot["HS%"] / 40) * 10
+
+if "KD" in plot.columns:
+    plot["KD_norm"] = (plot["KD"] / 2) * 10
+
+
 metrics_for_graph = [
     "Aim","Utility","Comms","Entry","Clutch",
-    "HS%","ACS","KD"
+    "HS_norm","ACS_norm","KD_norm"
 ]
 
 existing = [m for m in metrics_for_graph if m in plot.columns]
@@ -531,6 +675,13 @@ long = plot.melt(
     value_name="Score"
 ).dropna()
 
+# clean names
+long["Metric"] = long["Metric"].replace({
+    "HS_norm":"HS%",
+    "ACS_norm":"ACS",
+    "KD_norm":"KD"
+})
+
 fig = px.line(
     long,
     x="Date",
@@ -539,7 +690,15 @@ fig = px.line(
     markers=True,
     line_shape="spline"
 )
-fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",font_color="white")
+
+fig.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font_color="white",
+    yaxis=dict(range=[0,10], title="Performance Score"),
+    legend_title="Metric"
+)
+
 st.plotly_chart(fig,width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
 
@@ -618,6 +777,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
