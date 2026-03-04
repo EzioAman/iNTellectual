@@ -415,15 +415,14 @@ ROLE_WEIGHTS = {
 
 # ===== FINAL SCORE =====
 def final_score(row):
-
     role = row["Role"]
     stat_weight = ROLE_WEIGHTS.get(role,0.30)
     coach_weight = 1 - stat_weight
 
-    return (
-        row["CoachScore"] * coach_weight +
-        row["StatScore"] * stat_weight
-    )
+    coach = row["CoachScore"] if pd.notna(row["CoachScore"]) else 0
+    stat  = row["StatScore"] if pd.notna(row["StatScore"]) else 0
+
+    return (coach * coach_weight) + (stat * stat_weight)
 
 norm["Overall"] = norm.apply(final_score,axis=1)
 
@@ -548,6 +547,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
