@@ -609,7 +609,9 @@ fig_role = px.bar(
     role_avg,
     x="Role",
     y="Overall",
-    title="Role Performance Comparison"
+    title="Role Performance (Average performance of all players in the role)",
+    color="Overall",
+    color_continuous_scale="Reds"
 )
 
 fig_role.update_layout(
@@ -777,6 +779,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
