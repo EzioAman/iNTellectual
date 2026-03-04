@@ -367,13 +367,26 @@ for col in df.columns:
     if col not in ["Date","Player","Role","Agent"]:
         df[col]=pd.to_numeric(df[col],errors="coerce")
 
-# stat normalization to 0-10
-def rate(stat,val):
-    if pd.isna(val): return np.nan
-    if stat in ["Aim","Utility","Comms","Entry","Clutch"]: return val
-    if stat=="HS%": return np.clip((val-10)/(40-10)*10,0,10)
-    if stat=="ACS": return np.clip((val-120)/(300-120)*10,0,10)
-    if stat=="KD": return np.clip((val-0.6)/(1.6-0.6)*10,0,10)
+# Role benchmark values
+ROLE_STATS = {
+    "Duelist": {"HS%":26, "ACS":265, "KD":1.32},
+    "Controller": {"HS%":22, "ACS":220, "KD":1.18},
+    "Initiator": {"HS%":23, "ACS":235, "KD":1.22},
+    "Sentinel": {"HS%":22, "ACS":230, "KD":1.20},
+    "IGL": {"HS%":20, "ACS":205, "KD":1.10}
+}
+
+def rate(stat,val,role):  # CHANGED → added role parameter
+    if pd.isna(val): 
+        return np.nan
+    if stat in ["Aim","Utility","Comms","Entry","Clutch"]:
+        return val
+    if stat in ["HS%","ACS","KD"]:
+        role_avg = ROLE_STATS.get(role, {}).get(stat)
+        if role_avg:
+            score = (val / role_avg) * 10
+            return np.clip(score,0,10)
+            
     return np.nan
 
 metrics=["Aim","Utility","Comms","Entry","Clutch","HS%","ACS","KD"]
@@ -381,7 +394,7 @@ metrics=["Aim","Utility","Comms","Entry","Clutch","HS%","ACS","KD"]
 norm=df.copy()
 for m in metrics:
     if m in norm.columns:
-        norm[m]=norm[m].apply(lambda x:rate(m,x))
+        norm[m]=norm.apply(lambda r: rate(m, r[m], r["Role"]), axis=1)
 
 norm["Overall"]=norm[metrics].mean(axis=1)
 
@@ -506,6 +519,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
