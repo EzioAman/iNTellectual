@@ -286,9 +286,10 @@ def load():
     history_url = "https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/export?format=csv&gid=1232869485"
 
     history = pd.read_csv(history_url)
-
+    history.columns = history.columns.str.strip()
+    history["Player"] = history["Player"].apply(clean_riot_id)
     history["Date"] = pd.to_datetime(history["Date"], errors="coerce", dayfirst=True)
-
+    
     for col in ["HS%","ACS","KD"]:
         history[col] = pd.to_numeric(history[col], errors="coerce")
 
@@ -599,3 +600,4 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
