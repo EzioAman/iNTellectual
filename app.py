@@ -367,12 +367,23 @@ if st.button("Update Stats"):
             agent = row[header.index("Agent")]
             
             player_row_found = history_lookup.get((today, riot_id))
-        
+
+            aim = row[header.index("Aim")]
+            utility = row[header.index("Utility")]
+            comms = row[header.index("Comms")]
+            entry = row[header.index("Entry")]
+            clutch = row[header.index("Clutch")]
+            
             history_data = [
                 today,
                 riot_id,
                 role,
                 agent,
+                aim,
+                utility,
+                comms,
+                entry,
+                clutch,
                 stats["HS%"],
                 stats["ACS"],
                 stats["KD"]
@@ -607,5 +618,6 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
