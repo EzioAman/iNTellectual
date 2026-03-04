@@ -506,9 +506,16 @@ if plot.empty:
     st.info("No historical data yet. Press 'Update Stats' first.")
     st.stop()
     
+metrics_for_graph = [
+    "Aim","Utility","Comms","Entry","Clutch",
+    "HS%","ACS","KD"
+]
+
+existing = [m for m in metrics_for_graph if m in plot.columns]
+
 long = plot.melt(
     id_vars="Date",
-    value_vars=["HS%","ACS","KD"],
+    value_vars=existing,
     var_name="Metric",
     value_name="Score"
 ).dropna()
@@ -600,4 +607,5 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
