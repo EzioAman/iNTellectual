@@ -384,7 +384,7 @@ def rate(stat,val,role):  # CHANGED → added role parameter
     if stat in ["HS%","ACS","KD"]:
         role_avg = ROLE_STATS.get(role, {}).get(stat)
         if role_avg:
-            score = (val / role_avg) * 10
+            score = (val / role_avg) * 5
             return np.clip(score,0,10)
             
     return np.nan
@@ -519,6 +519,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
