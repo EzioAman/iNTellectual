@@ -221,7 +221,7 @@ def fetch_tracker_stats(riot_id):
                 competitive_games += 1
                 break
 
-            if competitive_games >= 10:
+            if competitive_games >= 20:
                 break
 
         if competitive_games == 0:
@@ -382,7 +382,7 @@ def rate(stat,val,role):  # CHANGED → added role parameter
     if stat in ["Aim","Utility","Comms","Entry","Clutch"]:
         return val
     if stat in ["HS%","ACS","KD"]:
-        role_avg = ROLE_STATS.get(role, {}).get(stat)
+        role_avg = ROLE_STATS.get(role, {}).get(stat, None)
         if role_avg:
             score = (val / role_avg) * 5
             return np.clip(score,0,10)
@@ -401,8 +401,8 @@ for m in metrics:
 coach_metrics = ["Aim","Utility","Comms","Entry","Clutch"]
 stat_metrics = ["HS%","ACS","KD"]
 
-norm["CoachScore"] = norm[coach_metrics].mean(axis=1)
-norm["StatScore"] = norm[stat_metrics].mean(axis=1)
+norm["CoachScore"] = norm[coach_metrics].mean(axis=1, skipna=True)
+norm["StatScore"] = norm[stat_metrics].mean(axis=1, skipna=True)
 
 # ===== ROLE WEIGHTS =====
 ROLE_WEIGHTS = {
@@ -548,6 +548,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
