@@ -202,6 +202,7 @@ def fetch_tracker_stats(riot_id):
                 kills   = stats["kills"]
                 deaths  = stats["deaths"]
                 assists = stats["assists"]
+                damage  = stats.get("damage_made", 0)
 
                 headshots = stats["headshots"]
                 body      = stats["bodyshots"]
@@ -214,7 +215,7 @@ def fetch_tracker_stats(riot_id):
                 total_headshots += headshots
                 total_shots += headshots + body + legs
 
-                total_score += (kills * 150) + (assists * 50)
+                total_score += damage + (kills * 150) + (assists * 50)
                 total_rounds += rounds
 
                 competitive_games += 1
@@ -505,6 +506,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
