@@ -13,6 +13,7 @@ API_KEY = st.secrets["API_KEY"]
 
 
 st.set_page_config(page_title="Game Drifters Valorant Team", layout="wide")
+pd.options.mode.chained_assignment = None
 
 # =========================================================
 # BACKGROUND
@@ -247,8 +248,6 @@ def fetch_tracker_stats(riot_id):
 # =========================================================
 SHEET_URL="https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/export?format=csv&gid=0"
 
-@st.cache_data(ttl=30)
-
 def clean_riot_id(player):
 
     if pd.isna(player):
@@ -267,16 +266,14 @@ def clean_riot_id(player):
 
     return player.strip()
 
+@st.cache_data(ttl=30)
 def load():
-
+    # ---- LIVE DATA (Sheet1)
     df = pd.read_csv(SHEET_URL)
     df.columns = df.columns.str.strip()
 
-    # keep rows that look like Riot IDs
     df = df[df["Player"].notna()]
     df = df[df["Player"].astype(str).str.contains("#")]
-
-    # clean spaces around Riot IDs
     df["Player"] = df["Player"].apply(clean_riot_id)
 
     df["Date"] = pd.to_datetime(
@@ -285,9 +282,19 @@ def load():
         dayfirst=True
     )
 
-    return df.sort_values("Date")
+    # ---- HISTORY DATA (Data sheet)
+    history_url = "https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/export?format=csv&gid=1232869485"
 
-df=load()
+    history = pd.read_csv(history_url)
+
+    history["Date"] = pd.to_datetime(history["Date"], errors="coerce", dayfirst=True)
+
+    for col in ["HS%","ACS","KD"]:
+        history[col] = pd.to_numeric(history[col], errors="coerce")
+
+    return df.sort_values("Date"), history.sort_values("Date")
+
+df, history = load()
 
 # =========================================================
 # UPDATE TRACKER BUTTON (SAFE BULK UPDATE)
@@ -324,6 +331,8 @@ if st.button("Update Stats"):
 
     today = pd.Timestamp.today().strftime("%d-%m-%Y")
     history_rows = data_sheet.get_all_values()
+
+    history_lookup = {(r[0], r[1]): i for i, r in enumerate(history_rows[1:], start=2) if len(r) >= 2}
     
     for sheet_row, row in enumerate(rows[1:], start=2):
 
@@ -355,13 +364,8 @@ if st.button("Update Stats"):
         
             role = row[header.index("Role")]
             agent = row[header.index("Agent")]
-        
-            player_row_found = None
-        
-            for i, r in enumerate(history_rows[1:], start=2):
-                if len(r) >= 2 and r[0] == today and r[1] == riot_id:
-                    player_row_found = i
-                    break
+            
+            player_row_found = history_lookup.get((today, riot_id))
         
             history_data = [
                 today,
@@ -496,10 +500,26 @@ st.markdown("</div>",unsafe_allow_html=True)
 # =========================================================
 st.markdown('<div class="card"><div class="section-title">Performance Breakdown</div>',unsafe_allow_html=True)
 
-plot=pn.tail(10)
-long=plot.melt(id_vars="Date",value_vars=metrics,var_name="Metric",value_name="Score").dropna()
-fig=px.line(long,x="Date",y="Score",color="Metric",markers=True)
-fig.update_yaxes(range=[0,10])
+plot = history[history["Player"] == player].sort_values("Date").tail(10)
+if plot.empty:
+    st.info("No historical data yet. Press 'Update Stats' first.")
+    st.stop()
+    
+long = plot.melt(
+    id_vars="Date",
+    value_vars=["HS%","ACS","KD"],
+    var_name="Metric",
+    value_name="Score"
+).dropna()
+
+fig = px.line(
+    long,
+    x="Date",
+    y="Score",
+    color="Metric",
+    markers=True,
+    line_shape="spline"
+)
 fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",font_color="white")
 st.plotly_chart(fig,width="stretch")
 st.markdown("</div>",unsafe_allow_html=True)
@@ -579,18 +599,3 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
