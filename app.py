@@ -169,7 +169,6 @@ def fetch_tracker_stats(riot_id):
         total_shots = 0
         total_score = 0
         total_rounds = 0
-        games = 0
         competitive_games = 0
 
         for match in matches:
@@ -308,9 +307,11 @@ if st.button("Update Stats"):
 
     client = gspread.authorize(creds)
 
-    sheet = client.open_by_key(
-        "1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0"
-    ).sheet1
+    spreadsheet = client.open_by_key(
+        "1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0")
+
+    sheet = spreadsheet.sheet1
+    data_sheet = spreadsheet.worksheet("Data")
 
     rows = sheet.get_all_values()
 
@@ -321,6 +322,9 @@ if st.button("Update Stats"):
     updated = 0
     processed = 0
 
+    today = pd.Timestamp.today().strftime("%d-%m-%Y")
+    history_rows = data_sheet.get_all_values()
+    
     for sheet_row, row in enumerate(rows[1:], start=2):
 
         if len(row) <= player_col:
@@ -333,10 +337,10 @@ if st.button("Update Stats"):
 
         st.write("Checking:", riot_id)
 
-        # ✅ REAL API CALL
+        # REAL API CALL
         stats = fetch_tracker_stats(riot_id)
         processed += 1
-
+        
         if not stats:
             st.warning(f"No recent match data → {riot_id}")
         else:
@@ -348,13 +352,41 @@ if st.button("Update Stats"):
                     stats["KD"]
                 ]]
             })
+        
+            role = row[header.index("Role")]
+            agent = row[header.index("Agent")]
+        
+            player_row_found = None
+        
+            for i, r in enumerate(history_rows[1:], start=2):
+                if len(r) >= 2 and r[0] == today and r[1] == riot_id:
+                    player_row_found = i
+                    break
+        
+            history_data = [
+                today,
+                riot_id,
+                role,
+                agent,
+                stats["HS%"],
+                stats["ACS"],
+                stats["KD"]
+            ]
+        
+            if player_row_found:
+                # overwrite today's entry
+                data_sheet.update(f"A{player_row_found}:G{player_row_found}", [history_data])
+            else:
+                # append new day entry
+                data_sheet.append_row(history_data)
+        
             updated += 1
 
         # ✅ RATE LIMIT PROTECTION (ONLY AFTER CALLS)
         if processed % 5 == 0:
             with st.spinner("Cooling API requests..."):
                 time.sleep(30)
-
+        
 
     # ✅ ONE GOOGLE API UPDATE
     if batch_updates:
@@ -547,6 +579,7 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
+
 
 
 
