@@ -516,7 +516,27 @@ st.markdown('<div class="card"><div class="section-title">Advanced Analytics</di
 # ==========================
 # PERFORMANCE TREND
 # ==========================
-trend = pn.sort_values("Date").tail(10)
+trend = history[history["Player"] == player].copy()
+coach_cols = ["Aim","Utility","Comms","Entry","Clutch"]
+
+for c in coach_cols:
+    if c in trend.columns:
+        trend[c] = pd.to_numeric(trend[c], errors="coerce")
+        
+# calculate normalized scores same as main system
+trend["HS_score"] = (trend["HS%"] / 40) * 10
+trend["ACS_score"] = (trend["ACS"] / 300) * 10
+trend["KD_score"] = (trend["KD"] / 2) * 10
+
+coach_cols = ["Aim","Utility","Comms","Entry","Clutch"]
+
+trend["CoachScore"] = trend[coach_cols].mean(axis=1)
+trend["StatScore"] = trend[["HS_score","ACS_score","KD_score"]].mean(axis=1)
+
+trend["Overall"] = trend["CoachScore"]*0.65 + trend["StatScore"]*0.35
+trend["Overall"] = trend["Overall"].rolling(3, min_periods=1).mean()
+
+trend = trend.sort_values("Date").tail(10)
 
 if not trend.empty:
     fig_trend = px.line(
@@ -527,7 +547,7 @@ if not trend.empty:
         line_shape="spline",
         title="Performance Trend"
     )
-    
+
     fig_trend.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
@@ -779,10 +799,3 @@ for i,(p,s) in enumerate(rank.items(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
-
-
-
-
-
-
-
