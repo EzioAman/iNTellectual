@@ -12,6 +12,7 @@
 **Track. Analyze. Improve. Win.**
 
 👉 **Live App:** https://intellectual.streamlit.app/
+👉 **Spreadsheet:** https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/edit?usp=sharing
 
 </div>
 
