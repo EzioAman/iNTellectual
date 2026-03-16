@@ -191,16 +191,17 @@ def fetch_tracker_stats(riot_id):
 
             queue = str(metadata.get("queue", "")).lower()
             mode  = str(metadata.get("mode", "")).lower()
-
-            # TRUE competitive detection
-            is_comp = any(x in (queue + mode) for x in [
-                "competitive",
-                "ranked",
-                "comp"
-            ])
-
-            # skip non competitive
-            if not is_comp:
+            
+            # skip obvious non-competitive modes
+            if any(x in (queue + mode) for x in [
+                "deathmatch",
+                "swift",
+                "spike",
+                "escalation",
+                "replication",
+                "snowball",
+                "custom"
+            ]):
                 continue
 
             rounds = max(1, metadata.get("rounds_played", 1))
