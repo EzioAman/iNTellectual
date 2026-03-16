@@ -144,15 +144,28 @@ def fetch_tracker_stats(riot_id):
         # ---------- GET REGION ----------
         acc_url = f"https://api.henrikdev.xyz/valorant/v1/account/{name}/{tag}"
         acc = requests.get(acc_url, headers=headers)
-
+        
         if acc.status_code != 200:
             return None
-
+        
         account = acc.json()["data"]
-
-        region = account["region"]
+        
+        # ===== REGION FIX =====
+        region_raw = str(account.get("region","")).lower()
+        
+        REGION_MAP = {
+            "ap": "ap",
+            "eu": "eu",
+            "na": "na",
+            "kr": "kr",
+            "latam": "latam",
+            "br": "br"
+        }
+        
+        region = REGION_MAP.get(region_raw, "ap")
+        
         player_puuid = account["puuid"]
-
+        
         # ---------- GET MATCHES ----------
         url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}"
         r = requests.get(url, headers=headers)
