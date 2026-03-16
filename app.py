@@ -167,7 +167,7 @@ def fetch_tracker_stats(riot_id):
         player_puuid = account["puuid"]
         
         # ---------- GET MATCHES ----------
-        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}"
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=20"
         r = requests.get(url, headers=headers)
 
         if r.status_code != 200:
