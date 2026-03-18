@@ -909,7 +909,10 @@ trend["KD_score"] = trend.apply(lambda r: rate("KD", r["KD"], r["Role"]), axis=1
 
 coach_cols = ["Aim","Utility","Comms","Entry","Clutch"]
 
-trend["CoachScore"] = trend[coach_cols].mean(axis=1)
+for m in coach_metrics:
+    trend[m] = trend.apply(lambda r: rate(m, r[m], r["Role"]), axis=1)
+
+trend["CoachScore"] = trend[coach_metrics].mean(axis=1)
 trend["StatScore"] = trend[["HS_score","ACS_score","KD_score"]].mean(axis=1)
 
 trend["Overall"] = trend.apply(final_score, axis=1)
