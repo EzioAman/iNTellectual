@@ -903,9 +903,9 @@ for c in coach_cols:
         trend[c] = pd.to_numeric(trend[c], errors="coerce")
         
 # calculate normalized scores same as main system
-trend["HS_score"] = (trend["HS%"] / 40) * 10
-trend["ACS_score"] = (trend["ACS"] / 300) * 10
-trend["KD_score"] = (trend["KD"] / 2) * 10
+trend["HS_score"] = trend.apply(lambda r: rate("HS%", r["HS%"], r["Role"]), axis=1)
+trend["ACS_score"] = trend.apply(lambda r: rate("ACS", r["ACS"], r["Role"]), axis=1)
+trend["KD_score"] = trend.apply(lambda r: rate("KD", r["KD"], r["Role"]), axis=1)
 
 coach_cols = ["Aim","Utility","Comms","Entry","Clutch"]
 
