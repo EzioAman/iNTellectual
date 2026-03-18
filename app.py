@@ -912,8 +912,7 @@ coach_cols = ["Aim","Utility","Comms","Entry","Clutch"]
 trend["CoachScore"] = trend[coach_cols].mean(axis=1)
 trend["StatScore"] = trend[["HS_score","ACS_score","KD_score"]].mean(axis=1)
 
-trend["Overall"] = trend["CoachScore"]*0.65 + trend["StatScore"]*0.35
-trend["Overall"] = trend["Overall"].rolling(3, min_periods=1).mean()
+trend["Overall"] = trend.apply(final_score, axis=1)
 
 trend = trend.sort_values("Date").tail(10)
 
@@ -1053,13 +1052,13 @@ if plot.empty:
 plot = plot.copy()
 
 if "ACS" in plot.columns:
-    plot["ACS_norm"] = (plot["ACS"] / 300) * 10
+    plot["ACS_norm"] = plot.apply(lambda r: rate("ACS", r["ACS"], r["Role"]), axis=1)
 
 if "HS%" in plot.columns:
-    plot["HS_norm"] = (plot["HS%"] / 40) * 10
+    plot["HS_norm"] = plot.apply(lambda r: rate("HS%", r["HS%"], r["Role"]), axis=1)
 
 if "KD" in plot.columns:
-    plot["KD_norm"] = (plot["KD"] / 2) * 10
+    plot["KD_norm"] = plot.apply(lambda r: rate("KD", r["KD"], r["Role"]), axis=1)
 
 
 metrics_for_graph = [
