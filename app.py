@@ -207,7 +207,7 @@ def fetch_tracker_stats(riot_id):
 
         headers = {"Authorization": API_KEY}
 
-        # ---------- GET ACCOUNT ----------
+        # ---------- GET REGION ----------
         acc_url = f"https://api.henrikdev.xyz/valorant/v1/account/{name}/{tag}"
         acc = requests.get(acc_url, headers=headers)
 
@@ -216,7 +216,8 @@ def fetch_tracker_stats(riot_id):
 
         account = acc.json()["data"]
 
-        region_raw = str(account.get("region", "")).lower()
+        # ===== REGION FIX =====
+        region_raw = str(account.get("region","")).lower()
 
         REGION_MAP = {
             "ap": "ap",
@@ -228,18 +229,20 @@ def fetch_tracker_stats(riot_id):
         }
 
         region = REGION_MAP.get(region_raw, "ap")
+
         player_puuid = account["puuid"]
 
-        # ---------- GET MATCHES (NO ACT FILTER) ----------
+        # ---------- GET MATCHES ----------
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}"
         url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=20"
         r = requests.get(url, headers=headers)
 
         if r.status_code != 200:
             return None
 
-        matches = r.json().get("data", [])
+        matches = r.json()["data"]
 
-        # ---------- ACCUMULATORS ----------
+        # ===== TOTAL ACCUMULATORS =====
         total_kills = 0
         total_deaths = 0
         total_assists = 0
@@ -251,36 +254,40 @@ def fetch_tracker_stats(riot_id):
 
         for match in matches:
 
-            metadata = match.get("metadata", {})
+            metadata = match["metadata"]
 
             queue = str(metadata.get("queue", "")).lower()
             mode  = str(metadata.get("mode", "")).lower()
 
-            # skip non-competitive garbage
+            # skip obvious non-competitive modes
             if any(x in (queue + mode) for x in [
-                "deathmatch", "swift", "spike",
-                "escalation", "replication",
-                "snowball", "custom"
+                "deathmatch",
+                "swift",
+                "spike",
+                "escalation",
+                "replication",
+                "snowball",
+                "custom"
             ]):
                 continue
 
             rounds = max(1, metadata.get("rounds_played", 1))
 
-            for p in match.get("players", {}).get("all_players", []):
+            for p in match["players"]["all_players"]:
 
                 if p.get("puuid") != player_puuid:
                     continue
 
-                stats = p.get("stats", {})
+                stats = p["stats"]
 
-                kills   = stats.get("kills", 0)
-                deaths  = stats.get("deaths", 0)
-                assists = stats.get("assists", 0)
+                kills   = stats["kills"]
+                deaths  = stats["deaths"]
+                assists = stats["assists"]
                 damage  = stats.get("damage_made", 0)
 
-                headshots = stats.get("headshots", 0)
-                body      = stats.get("bodyshots", 0)
-                legs      = stats.get("legshots", 0)
+                headshots = stats["headshots"]
+                body      = stats["bodyshots"]
+                legs      = stats["legshots"]
 
                 total_kills += kills
                 total_deaths += deaths
@@ -289,7 +296,6 @@ def fetch_tracker_stats(riot_id):
                 total_headshots += headshots
                 total_shots += headshots + body + legs
 
-                # same ACS logic you used
                 total_score += damage + (kills * 150) + (assists * 50)
                 total_rounds += rounds
 
@@ -302,7 +308,8 @@ def fetch_tracker_stats(riot_id):
         if competitive_games == 0:
             return None
 
-        # ---------- FINAL ----------
+
+        # ===== FINAL STATS =====
         KD  = total_kills / max(1, total_deaths)
         ACS = total_score / max(1, total_rounds)
         HS  = (total_headshots / max(1, total_shots)) * 100
