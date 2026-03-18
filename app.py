@@ -579,6 +579,38 @@ def final_score(row):
     return (coach * coach_weight) + (stat * stat_weight)
 
 norm["Overall"] = norm.apply(final_score,axis=1)
+team_avg = norm.groupby("Player")["Overall"].mean().mean()
+top_fragger = norm.groupby("Player")["KD"].mean().idxmax()
+best_aim = norm.groupby("Player")["HS%"].mean().idxmax()
+
+st.markdown(f"""
+<div style="
+display:flex;
+justify-content:space-around;
+background:rgba(20,20,25,.7);
+border:1px solid rgba(255,70,85,.3);
+border-radius:10px;
+padding:14px;
+margin-bottom:20px;
+">
+
+<div style="text-align:center;">
+<div style="color:#9ca3af;">Team Rating</div>
+<div style="color:white;font-size:22px;font-weight:bold;">{team_avg:.2f}</div>
+</div>
+
+<div style="text-align:center;">
+<div style="color:#9ca3af;">Top Fragger</div>
+<div style="color:#ff4655;font-size:18px;">{top_fragger}</div>
+</div>
+
+<div style="text-align:center;">
+<div style="color:#9ca3af;">Best Aim</div>
+<div style="color:#ff4655;font-size:18px;">{best_aim}</div>
+</div>
+
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # PLAYER
