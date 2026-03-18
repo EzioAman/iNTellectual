@@ -857,7 +857,6 @@ def agent_img(agent):
 def highlight_card(player, df, rank):
 
     pdata = df[df["Player"] == player]
-
     if pdata.empty:
         return ""
 
@@ -866,33 +865,34 @@ def highlight_card(player, df, rank):
 
     hs = pdata["HS%"].mean()
     kd = pdata["KD"].mean()
-    
+
     role = pdata["Role"].iloc[-1] if "Role" in pdata.columns else ""
     role_class = f"badge-{role.lower()}" if role else "badge"
 
     tier = "S" if overall >= 9 else "A" if overall >= 8 else "B" if overall >= 7 else "C"
-
     mvp_class = "mvp" if rank == 1 else ""
 
     agent = pdata["Agent"].iloc[-1] if "Agent" in pdata.columns else None
     img = agent_img(agent)
-    
-    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:10px;padding:16px;margin-bottom:15px;">
-    <img src="{img}" style="height:60px;border-radius:6px;">
+
+    img_tag = f'<img src="{img}" style="height:70px;width:70px;border-radius:8px;object-fit:cover;">' if img else ""
+
+    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:12px;padding:18px;margin-bottom:15px;">
+    {img_tag}
     <div style="flex:1;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
     <div style="display:flex;align-items:center;gap:8px;">
-    <b style="color:white">{player}</b>
+    <b style="color:white;font-size:18px;">{player}</b>
     <span class="badge {role_class}">{role}</span>
     </div>
-    <span style="color:#ff4655">#{rank} {tier}</span>
+    <span style="color:#ff4655;font-weight:bold;">#{rank} {tier}</span>
     </div>
-    <div style="margin-top:8px;color:#9ca3af;">⭐ {overall:.2f} | 🔥 {form:.2f}</div>
-    <div style="margin-top:8px;display:flex;gap:12px;">
+    <div style="margin-top:10px;color:#9ca3af;">⭐ {overall:.2f} | 🔥 {form:.2f}</div>
+    <div style="margin-top:10px;display:flex;gap:14px;">
     <span>🎯 {hs:.1f}%</span>
     <span>⚔ {kd:.2f}</span>
     </div>
-    {"<div style='margin-top:6px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}
+    {"<div style='margin-top:8px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}
     </div>
     </div>"""
 
