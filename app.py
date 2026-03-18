@@ -529,12 +529,23 @@ ROLE_STATS = {
     "Sentinel": {"HS%":22, "ACS":230, "KD":1.20},
     "IGL": {"HS%":20, "ACS":205, "KD":1.10}
 }
+ROLE_TARGETS = {
+    "Duelist": {"Aim":9, "Utility":6.5, "Comms":7, "Entry":10, "Clutch":7.5},
+    "Controller": {"Aim":7.5, "Utility":9, "Comms":8.5, "Entry":6, "Clutch":8.5},
+    "Initiator": {"Aim":8, "Utility":9.5, "Comms":8.5, "Entry":8.5, "Clutch":8},
+    "Sentinel": {"Aim":7.5, "Utility":8.5, "Comms":8, "Entry":5.5, "Clutch":9},
+    "IGL": {"Aim":7, "Utility":8, "Comms":10, "Entry":6.5, "Clutch":9.5}
+}
 
-def rate(stat,val,role):  # CHANGED → added role parameter
+def rate(stat,val,role):
     if pd.isna(val): 
         return np.nan
     if stat in ["Aim","Utility","Comms","Entry","Clutch"]:
-        return val
+        target = ROLE_TARGETS.get(role, {}).get(stat, None)
+        if target:
+            score = (val / target) * 10
+            return np.clip(score, 0, 10)
+        return np.nan
     if stat in ["HS%","ACS","KD"]:
         role_avg = ROLE_STATS.get(role, {}).get(stat, None)
         if role_avg:
