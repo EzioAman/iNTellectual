@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -883,8 +884,10 @@ st.markdown('<div class="card"><div class="section-title">Top Performers</div>',
 
 top_players = norm.groupby("Player")["Overall"].mean().sort_values(ascending=False).head(5).index
 
+html_block = ""
 for i, p in enumerate(top_players, start=1):
-    st.markdown(highlight_card(p, norm, i), unsafe_allow_html=True)
+    html_block += highlight_card(p, norm, i)
+components.html(html_block, height=800, scrolling=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
