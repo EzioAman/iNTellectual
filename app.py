@@ -207,18 +207,17 @@ def fetch_tracker_stats(riot_id):
 
         headers = {"Authorization": API_KEY}
 
-        # ---------- GET REGION ----------
+        # ---------- GET ACCOUNT ----------
         acc_url = f"https://api.henrikdev.xyz/valorant/v1/account/{name}/{tag}"
         acc = requests.get(acc_url, headers=headers)
-        
+
         if acc.status_code != 200:
             return None
-        
+
         account = acc.json()["data"]
-        
-        # ===== REGION FIX =====
-        region_raw = str(account.get("region","")).lower()
-        
+
+        region_raw = str(account.get("region", "")).lower()
+
         REGION_MAP = {
             "ap": "ap",
             "eu": "eu",
@@ -227,107 +226,20 @@ def fetch_tracker_stats(riot_id):
             "latam": "latam",
             "br": "br"
         }
-        
-        region = REGION_MAP.get(region_raw, "ap")
-        
-        player_puuid = account["puuid"]
-        
-        # ---------- GET CURRENT ACT ----------
-        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=25"
-        r = requests.get(url, headers=headers)
-        
-        if r.status_code != 200:
-            return None
-        
-        matches = r.json()["data"]
-        
-        # ===== DETECT CURRENT ACT FROM MATCHES =====
-        current_act = None
-        
-        for m in matches:
-            metadata = m.get("metadata", {})
-            season = metadata.get("season")
-        
-            if season:
-                current_act = str(season).lower()
-        
-        if not current_act:
-            return None
-        
-        # ===== FILTER COMP + SAME ACT =====
-        filtered_matches = []
-        
-        for m in matches:
-            metadata = m.get("metadata", {})
-        
-            queue = str(metadata.get("queue", "")).lower()
-            season = str(metadata.get("season", "")).lower()
-        
-            if "competitive" not in queue:
-                continue
-        
-            if season != current_act:
-                continue
-        
-            filtered_matches.append(m)
-        
-        if not filtered_matches:
-            return None
-        
-        matches = filtered_matches[:20]
-        
-        
-        if not current_act:
-            return None
-        
-        
-        # ---------- GET MATCHES ----------
-        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=25"
-        r = requests.get(url, headers=headers)
-        
-        if r.status_code != 200:
-            return None
-        
-        matches = r.json()["data"]
-        
-        # ===== FILTER CURRENT ACT (KEY FIX) =====
-        filtered_matches = []
 
-        for m in matches:
-            metadata = m.get("metadata", {})
-        
-            queue = str(metadata.get("queue", "")).lower()
-            season = str(metadata.get("season", "")).lower()
-        
-            # only competitive
-            if "competitive" not in queue:
-                continue
-        
-            # skip if season missing
-            if not season:
-                continue
-        
-            # ACT match (robust compare)
-            if current_act.lower() not in season:
-                continue
-        
-            filtered_matches.append(m)
-        
-        # fallback if empty (IMPORTANT)
-        if not filtered_matches:
-            # fallback: just take competitive matches (no act filter)
-            for m in matches:
-                metadata = m.get("metadata", {})
-                queue = str(metadata.get("queue", "")).lower()
-        
-                if "competitive" in queue:
-                    filtered_matches.append(m)
-        
-        # limit
-        matches = filtered_matches[:20]
-        
-        
-        # ===== TOTAL ACCUMULATORS (UNCHANGED) =====
+        region = REGION_MAP.get(region_raw, "ap")
+        player_puuid = account["puuid"]
+
+        # ---------- GET MATCHES (NO ACT FILTER) ----------
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=20"
+        r = requests.get(url, headers=headers)
+
+        if r.status_code != 200:
+            return None
+
+        matches = r.json().get("data", [])
+
+        # ---------- ACCUMULATORS ----------
         total_kills = 0
         total_deaths = 0
         total_assists = 0
@@ -336,43 +248,39 @@ def fetch_tracker_stats(riot_id):
         total_score = 0
         total_rounds = 0
         competitive_games = 0
-        
+
         for match in matches:
 
-            metadata = match["metadata"]
+            metadata = match.get("metadata", {})
 
             queue = str(metadata.get("queue", "")).lower()
             mode  = str(metadata.get("mode", "")).lower()
-            
-            # skip obvious non-competitive modes
+
+            # skip non-competitive garbage
             if any(x in (queue + mode) for x in [
-                "deathmatch",
-                "swift",
-                "spike",
-                "escalation",
-                "replication",
-                "snowball",
-                "custom"
+                "deathmatch", "swift", "spike",
+                "escalation", "replication",
+                "snowball", "custom"
             ]):
                 continue
 
             rounds = max(1, metadata.get("rounds_played", 1))
 
-            for p in match["players"]["all_players"]:
+            for p in match.get("players", {}).get("all_players", []):
 
                 if p.get("puuid") != player_puuid:
                     continue
 
-                stats = p["stats"]
+                stats = p.get("stats", {})
 
-                kills   = stats["kills"]
-                deaths  = stats["deaths"]
-                assists = stats["assists"]
+                kills   = stats.get("kills", 0)
+                deaths  = stats.get("deaths", 0)
+                assists = stats.get("assists", 0)
                 damage  = stats.get("damage_made", 0)
 
-                headshots = stats["headshots"]
-                body      = stats["bodyshots"]
-                legs      = stats["legshots"]
+                headshots = stats.get("headshots", 0)
+                body      = stats.get("bodyshots", 0)
+                legs      = stats.get("legshots", 0)
 
                 total_kills += kills
                 total_deaths += deaths
@@ -381,6 +289,7 @@ def fetch_tracker_stats(riot_id):
                 total_headshots += headshots
                 total_shots += headshots + body + legs
 
+                # same ACS logic you used
                 total_score += damage + (kills * 150) + (assists * 50)
                 total_rounds += rounds
 
@@ -393,8 +302,7 @@ def fetch_tracker_stats(riot_id):
         if competitive_games == 0:
             return None
 
-
-        # ===== FINAL STATS =====
+        # ---------- FINAL ----------
         KD  = total_kills / max(1, total_deaths)
         ACS = total_score / max(1, total_rounds)
         HS  = (total_headshots / max(1, total_shots)) * 100
