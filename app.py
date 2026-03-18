@@ -1122,7 +1122,8 @@ rank = norm.groupby("Player").agg({
         ascending=False
     )
 
-for i,(p,s) in enumerate(rank.items(),1):
+for i,(p,row) in enumerate(rank.iterrows(),1):
+    s = row["Overall"]
     tier="S" if s>=9 else "A" if s>=8 else "B" if s>=7 else "C"
     agent=df[df["Player"]==p]["Agent"].dropna()
     agent=agent.iloc[-1] if len(agent) else None
