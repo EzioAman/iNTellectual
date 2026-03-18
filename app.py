@@ -965,74 +965,95 @@ for i, p in enumerate(top_players, start=1):
 components.html(f"""
 <style>
 body {{
-    background: transparent;
+    margin:0;
+    padding:10px;
     font-family: 'Teko', sans-serif;
+    background: transparent;
 }}
 
-.card-anim {{
-    transition: all 0.25s ease;
+/* ===== GRID ===== */
+.grid {{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
 }}
 
-.card-anim:hover {{
-    transform: scale(1.02);
-    box-shadow: 0 0 25px rgba(255,70,85,0.4);
+/* ===== CARD ===== */
+.card {{
+    display:flex;
+    gap:12px;
+    background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));
+    border:1px solid rgba(255,70,85,.5);
+    border-radius:10px;
+    padding:14px;
+    transition:0.2s;
+}}
+
+.card:hover {{
+    transform:scale(1.03);
+    box-shadow:0 0 20px rgba(255,70,85,.4);
 }}
 
 .mvp {{
-    border: 2px solid gold !important;
-    box-shadow: 0 0 20px gold;
+    border:2px solid gold;
+    box-shadow:0 0 20px gold;
 }}
 
+/* ===== IMAGE ===== */
+.card img {{
+    width:60px;
+    height:60px;
+    border-radius:8px;
+}}
+
+/* ===== HEADER ===== */
+.name {{
+    font-size:16px;
+    color:white;
+}}
+
+.rank {{
+    color:#ff4655;
+    font-size:13px;
+}}
+
+/* ===== BADGE ===== */
 .badge {{
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    margin-left: 6px;
+    padding:2px 6px;
+    border-radius:5px;
+    font-size:10px;
 }}
 
-.badge-duelist {{ background:#ff4655; color:white; }}
-.badge-controller {{ background:#3b82f6; color:white; }}
-.badge-initiator {{ background:#10b981; color:white; }}
-.badge-sentinel {{ background:#f59e0b; color:black; }}
-.badge-igl {{ background:#8b5cf6; color:white; }}
+.badge-duelist {{background:#ff4655;color:white;}}
+.badge-controller {{background:#3b82f6;color:white;}}
+.badge-initiator {{background:#10b981;color:white;}}
+.badge-sentinel {{background:#f59e0b;color:black;}}
 
+/* ===== STATS ===== */
 .stat-row {{
     display:flex;
-    gap:12px;
-    margin-top:10px;
+    gap:8px;
+    margin-top:8px;
 }}
 
-.stat-box {{
+.stat {{
     background:rgba(255,255,255,0.05);
-    padding:6px 10px;
-    border-radius:6px;
-    display:flex;
-    flex-direction:column;
-    min-width:70px;
-}}
-
-.stat-label {{
-    font-size:10px;
-    color:#9ca3af;
-    text-transform:uppercase;
-}}
-
-.stat-value {{
-    font-size:14px;
-    color:white;
-    font-weight:600;
+    padding:4px 8px;
+    border-radius:5px;
+    font-size:11px;
 }}
 
 .mvp-tag {{
-    margin-top:8px;
     color:gold;
-    font-weight:bold;
-    font-size:13px;
+    font-size:12px;
+    margin-top:6px;
 }}
 </style>
 
-{html_block}
-""", height=1200, scrolling=True)
+<div class="grid">
+{html_block.replace('card-anim', 'card')}
+</div>
+""", height=600, scrolling=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
