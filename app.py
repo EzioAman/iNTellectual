@@ -540,17 +540,19 @@ ROLE_TARGETS = {
 def rate(stat,val,role):
     if pd.isna(val): 
         return np.nan
+        
     if stat in ["Aim","Utility","Comms","Entry","Clutch"]:
         target = ROLE_TARGETS.get(role, {}).get(stat, None)
         if target:
             score = (val / target) * 10
             return np.clip(score, 0, 10)
         return np.nan
+        
     if stat in ["HS%","ACS","KD"]:
         role_avg = ROLE_STATS.get(role, {}).get(stat, None)
         if role_avg:
-            score = (val / role_avg) * 5
-            return np.clip(score,0,10)
+            score = (val / role_avg) * 10
+            return np.clip(score, 0, 10)
             
     return np.nan
 
