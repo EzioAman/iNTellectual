@@ -251,25 +251,11 @@ def fetch_tracker_stats(riot_id):
         total_score = 0
         total_rounds = 0
         competitive_games = 0
-        
+
         for match in matches:
-        
+
             metadata = match["metadata"]
-        
-            # ===== ACT FILTER =====
-            match_time = metadata.get("game_start")
-            if not match_time:
-                continue
-            
-            match_date = pd.to_datetime(match_time, unit="ms", utc=True, errors="coerce")
-            
-            # STRICT ACT FILTER
-            if pd.isna(match_date):
-                continue
-            
-            if match_date <= ACT_START_DATE:
-                break
-        
+
             queue = str(metadata.get("queue", "")).lower()
             mode  = str(metadata.get("mode", "")).lower()
 
