@@ -389,7 +389,7 @@ def load():
     )
 
     # ---- HISTORY DATA (Data sheet)
-    history_url = "https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/export?format=csv&gid=1232869485"
+    history_url = "https://docs.google.com/spreadsheets/d/1p5u4T--HBuZhsoFBUoZmLnYH7Qvk8m7Ts7flv7xVCW0/gviz/tq?tqx=out:csv&sheet=Data"
 
     history = pd.read_csv(history_url)
     history.columns = history.columns.str.strip()
