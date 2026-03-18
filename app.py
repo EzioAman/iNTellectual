@@ -189,10 +189,32 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="valorant-title">Game Drifters</div>', unsafe_allow_html=True)
-st.markdown('<div class="valorant-sub">Valorant Roster</div>', unsafe_allow_html=True)
-st.markdown('<div class="valorant-line"></div>', unsafe_allow_html=True)
-st.markdown('<div class="valorant-tag">Members Performance Analytics</div>', unsafe_allow_html=True)
+st.markdown("""
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:linear-gradient(90deg,#0f172a,#1f2937);
+border:1px solid rgba(255,70,85,.4);
+padding:12px 20px;
+border-radius:10px;
+margin-bottom:20px;
+">
+
+<div style="color:white;font-size:18px;">
+🔥 <b>Game Drifters</b> vs <b>Opponent TBD</b>
+</div>
+
+<div style="color:#ff4655;font-size:20px;font-weight:bold;">
+BO3 • MAP 1 • LIVE
+</div>
+
+<div style="color:#9ca3af;font-size:14px;">
+Patch 8.X • Competitive
+</div>
+
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # Tracker Data
