@@ -1113,7 +1113,14 @@ st.markdown("</div>",unsafe_allow_html=True)
 
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
 
-rank=norm.groupby("Player")["Overall"].mean().sort_values(ascending=False)
+rank = norm.groupby("Player").agg({
+        "Overall":"mean",
+        "KD":"mean",
+        "ACS":"mean"
+    }).sort_values(
+        by=["Overall","KD","ACS"],
+        ascending=False
+    )
 
 for i,(p,s) in enumerate(rank.items(),1):
     tier="S" if s>=9 else "A" if s>=8 else "B" if s>=7 else "C"
