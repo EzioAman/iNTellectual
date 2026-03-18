@@ -250,7 +250,6 @@ def fetch_tracker_stats(riot_id):
         
             if season:
                 current_act = str(season).lower()
-                break
         
         if not current_act:
             return None
