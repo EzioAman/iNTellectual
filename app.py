@@ -152,6 +152,40 @@ st.markdown("""
 .badge-sentinel { background:#f59e0b; color:black; }
 .badge-igl { background:#8b5cf6; color:white; }
 
+.stat-row{
+    display:flex;
+    gap:12px;
+    margin-top:10px;
+}
+
+.stat-box{
+    background:rgba(255,255,255,0.05);
+    padding:6px 10px;
+    border-radius:6px;
+    display:flex;
+    flex-direction:column;
+    min-width:70px;
+}
+
+.stat-label{
+    font-size:10px;
+    color:#9ca3af;
+    text-transform:uppercase;
+}
+
+.stat-value{
+    font-size:14px;
+    color:white;
+    font-weight:600;
+}
+
+.mvp-tag{
+    margin-top:8px;
+    color:gold;
+    font-weight:bold;
+    font-size:13px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -878,16 +912,127 @@ def highlight_card(player, df, rank):
 
     img_tag = f'<img src="{img}" style="height:70px;width:70px;border-radius:8px;object-fit:cover;">' if img else ""
 
-    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:12px;padding:18px;margin-bottom:15px;">{img_tag}<div style="flex:1;"><div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><b style="color:white;font-size:18px;">{player}</b><span class="badge {role_class}">{role}</span></div><span style="color:#ff4655;font-weight:bold;">#{rank} {tier}</span></div><div style="margin-top:10px;color:#9ca3af;">⭐ Overall: {overall:.2f} | 🔥 Form: {form:.2f}</div><div style="margin-top:10px;display:flex;gap:14px;"><span>🎯 HS%: {hs:.1f}%</span><span>| ⚔ KD: {kd:.2f}</span></div>{"<div style='margin-top:8px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}</div></div>"""
+    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:12px;padding:18px;margin-bottom:15px;">
+    {img_tag}
+    <div style="flex:1;">
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:8px;">
+    <b style="color:white;font-size:18px;">{player}</b>
+    <span class="badge {role_class}">{role}</span>
+    </div>
+    <span style="color:#ff4655;font-weight:bold;">#{rank} {tier}</span>
+    </div>
+    
+    <div class="stat-row">
+    <div class="stat-box">
+    <span class="stat-label">Overall</span>
+    <span class="stat-value">{overall:.2f}</span>
+    </div>
+    
+    <div class="stat-box">
+    <span class="stat-label">Form</span>
+    <span class="stat-value">{form:.2f}</span>
+    </div>
+    </div>
+    
+    <div class="stat-row">
+    <div class="stat-box">
+    <span class="stat-label">HS%</span>
+    <span class="stat-value">{hs:.1f}%</span>
+    </div>
+    
+    <div class="stat-box">
+    <span class="stat-label">K/D</span>
+    <span class="stat-value">{kd:.2f}</span>
+    </div>
+    </div>
+    
+    {"<div class='mvp-tag'>MVP</div>" if rank==1 else ""}
+    
+    </div>
+    </div>"""
 
 st.markdown('<div class="card"><div class="section-title">Top Performers</div>',unsafe_allow_html=True)
 
 top_players = norm.groupby("Player")["Overall"].mean().sort_values(ascending=False).head(5).index
 
 html_block = ""
+
 for i, p in enumerate(top_players, start=1):
     html_block += highlight_card(p, norm, i)
-components.html(html_block, height=800, scrolling=True)
+
+components.html(f"""
+<style>
+body {{
+    background: transparent;
+    font-family: 'Teko', sans-serif;
+}}
+
+.card-anim {{
+    transition: all 0.25s ease;
+}}
+
+.card-anim:hover {{
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(255,70,85,0.4);
+}}
+
+.mvp {{
+    border: 2px solid gold !important;
+    box-shadow: 0 0 20px gold;
+}}
+
+.badge {{
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin-left: 6px;
+}}
+
+.badge-duelist {{ background:#ff4655; color:white; }}
+.badge-controller {{ background:#3b82f6; color:white; }}
+.badge-initiator {{ background:#10b981; color:white; }}
+.badge-sentinel {{ background:#f59e0b; color:black; }}
+.badge-igl {{ background:#8b5cf6; color:white; }}
+
+.stat-row {{
+    display:flex;
+    gap:12px;
+    margin-top:10px;
+}}
+
+.stat-box {{
+    background:rgba(255,255,255,0.05);
+    padding:6px 10px;
+    border-radius:6px;
+    display:flex;
+    flex-direction:column;
+    min-width:70px;
+}}
+
+.stat-label {{
+    font-size:10px;
+    color:#9ca3af;
+    text-transform:uppercase;
+}}
+
+.stat-value {{
+    font-size:14px;
+    color:white;
+    font-weight:600;
+}}
+
+.mvp-tag {{
+    margin-top:8px;
+    color:gold;
+    font-weight:bold;
+    font-size:13px;
+}}
+</style>
+
+{html_block}
+""", height=1200, scrolling=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
