@@ -119,6 +119,37 @@ st.markdown("""
     letter-spacing: 1px;
     margin-bottom: 40px;
 }
+/* ===== CARD ANIMATION ===== */
+
+.card-anim {
+    transition: all 0.25s ease;
+}
+
+.card-anim:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(255,70,85,0.4);
+}
+
+/* ===== MVP GLOW ===== */
+
+.mvp {
+    border: 2px solid gold !important;
+    box-shadow: 0 0 20px gold;
+}
+/* ===== ROLE BADGES ===== */
+
+.badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin-left: 6px;
+}
+
+.badge-duelist { background:#ff4655; color:white; }
+.badge-controller { background:#3b82f6; color:white; }
+.badge-initiator { background:#10b981; color:white; }
+.badge-sentinel { background:#f59e0b; color:black; }
+.badge-igl { background:#8b5cf6; color:white; }
 
 </style>
 """, unsafe_allow_html=True)
@@ -166,16 +197,42 @@ def fetch_tracker_stats(riot_id):
         
         player_puuid = account["puuid"]
         
+        # ---------- GET CURRENT ACT ----------
+        act_url = "https://api.henrikdev.xyz/valorant/v1/seasons"
+        act_res = requests.get(act_url, headers=headers)
+        
+        if act_res.status_code != 200:
+            return None
+        
+        acts = act_res.json()["data"]
+        
+        current_act = None
+        for act in acts:
+            if act.get("isActive") and act.get("type") == "act":
+                current_act = act["id"]
+                break
+        
+        if not current_act:
+            return None
+        
+        
         # ---------- GET MATCHES ----------
-        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=20"
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=25"
         r = requests.get(url, headers=headers)
-
+        
         if r.status_code != 200:
             return None
-
+        
         matches = r.json()["data"]
-
-        # ===== TOTAL ACCUMULATORS =====
+        
+        # ===== FILTER CURRENT ACT (KEY FIX) =====
+        matches = [
+            m for m in matches
+            if str(m.get("metadata", {}).get("season_id", "")).lower() == str(current_act).lower()
+        ]
+        
+        
+        # ===== TOTAL ACCUMULATORS (UNCHANGED) =====
         total_kills = 0
         total_deaths = 0
         total_assists = 0
@@ -184,7 +241,7 @@ def fetch_tracker_stats(riot_id):
         total_score = 0
         total_rounds = 0
         competitive_games = 0
-
+        
         for match in matches:
 
             metadata = match["metadata"]
@@ -502,6 +559,7 @@ impact=career*0.6+form*0.25+consistency*0.15
 # =========================================================
 # GAUGE
 # =========================================================
+
 def gauge(title,value):
     fig=go.Figure(go.Indicator(
         mode="gauge+number",
@@ -512,6 +570,8 @@ def gauge(title,value):
     ))
     fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",height=300)
     return fig
+
+
 
 st.markdown('<div class="card"><div class="section-title">Player Analytics</div>',unsafe_allow_html=True)
 c1,c2,c3,c4=st.columns(4)
@@ -789,9 +849,80 @@ def agent_img(agent):
     if pd.isna(agent): return ""
     return AGENT_IMAGES.get(str(agent).lower().strip(),"")
 
+
 # =========================================================
-# TEAM RANK
+# PLAYER CARD AND TEAM RANK
 # =========================================================
+
+def highlight_card(player, df, rank):
+
+    pdata = df[df["Player"] == player]
+
+    if pdata.empty:
+        return ""
+
+    overall = pdata["Overall"].mean()
+    form = pdata.tail(3)["Overall"].mean()
+
+    hs = pdata["HS%"].mean()
+    kd = pdata["KD"].mean()
+    
+    role = pdata["Role"].iloc[-1] if "Role" in pdata.columns else ""
+    role_class = f"badge-{role.lower()}" if role else "badge"
+
+    tier = "S" if overall >= 9 else "A" if overall >= 8 else "B" if overall >= 7 else "C"
+
+    mvp_class = "mvp" if rank == 1 else ""
+
+    agent = pdata["Agent"].iloc[-1] if "Agent" in pdata.columns else None
+    img = agent_img(agent)
+    
+    return f"""
+    <div class="card-anim {mvp_class}" style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+        background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));
+        border:1px solid rgba(255,70,85,.5);
+        border-radius:10px;
+        padding:16px;
+        margin-bottom:15px;
+    ">
+    
+        <img src="{img}" style="height:60px;border-radius:6px;">
+        
+        <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <b style="color:white">{player}</b>
+                    <span class="badge {role_class}">{role}</span>
+                </div>
+                <span style="color:#ff4655">#{rank} {tier}</span>
+            </div>
+    
+            <div style="margin-top:8px;color:#9ca3af;">
+                ⭐ {overall:.2f} | 🔥 {form:.2f}
+            </div>
+    
+            <div style="margin-top:8px;display:flex;gap:12px;">
+                <span>🎯 {hs:.1f}%</span>
+                <span>⚔ {kd:.2f}</span>
+            </div>
+    
+            {"<div style='margin-top:6px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}
+        </div>
+    
+    </div>
+    """
+
+st.markdown('<div class="card"><div class="section-title">Top Performers</div>',unsafe_allow_html=True)
+
+top_players = norm.groupby("Player")["Overall"].mean().sort_values(ascending=False).head(5).index
+
+for i, p in enumerate(top_players, start=1):
+    st.markdown(highlight_card(p, norm, i), unsafe_allow_html=True)
+
+st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
 
 rank=norm.groupby("Player")["Overall"].mean().sort_values(ascending=False)
