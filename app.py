@@ -275,7 +275,7 @@ def fetch_tracker_stats(riot_id):
             return None
         
         matches = filtered_matches[:20]
-                break
+        
         
         if not current_act:
             return None
