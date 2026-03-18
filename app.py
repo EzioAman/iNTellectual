@@ -617,6 +617,11 @@ margin-bottom:20px;
 # PLAYER
 # =========================================================
 player=st.selectbox("Player",norm["Player"].dropna().unique())
+player_df = norm[norm["Player"] == player]
+
+avg_performance = player_df["Overall"].mean()
+kd = player_df["KD"].mean()
+hs = player_df["HS%"].mean()
 pn=norm[(norm["Player"]==player)&(norm["Overall"].notna())]
 
 career=pn["Overall"].mean()
