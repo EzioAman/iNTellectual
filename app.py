@@ -579,39 +579,41 @@ def final_score(row):
     return (coach * coach_weight) + (stat * stat_weight)
 
 norm["Overall"] = norm.apply(final_score,axis=1)
+role_best = (
+    norm.groupby(["Role","Player"])["Overall"]
+    .mean()
+    .reset_index()
+)
 
-team_avg = norm.groupby("Player")["Overall"].mean().mean()
-top_fragger = norm.groupby("Player")["KD"].mean().idxmax()
-best_aim = norm.groupby("Player")["HS%"].mean().idxmax()
+role_best = role_best.loc[
+    role_best.groupby("Role")["Overall"].idxmax()
+]
 
-st.markdown(f"""
-<div style="
-display:flex;
-justify-content:space-around;
-background:rgba(20,20,25,.7);
-border:1px solid rgba(255,70,85,.3);
-border-radius:10px;
-padding:14px;
-margin-bottom:20px;
-">
+st.markdown('<div class="card"><div class="section-title">Best Player Per Role</div>', unsafe_allow_html=True)
 
-<div style="text-align:center;">
-<div style="color:#9ca3af;">Team Rating</div>
-<div style="color:white;font-size:22px;font-weight:bold;">{team_avg:.2f}</div>
-</div>
+role_order = ["Duelist","Initiator","Controller","Sentinel","IGL"]
+role_best = role_best.set_index("Role").reindex(role_order).dropna().reset_index()
+cols = st.columns(len(role_best))
 
-<div style="text-align:center;">
-<div style="color:#9ca3af;">Top Fragger</div>
-<div style="color:#ff4655;font-size:18px;">{top_fragger}</div>
-</div>
+for i, (_, row) in enumerate(role_best.iterrows()):
+    with cols[i]:
+        st.markdown(f"""
+        <div style="
+        background:rgba(20,20,25,.7);
+        border:1px solid rgba(255,70,85,.3);
+        border-radius:10px;
+        padding:12px;
+        text-align:center;
+        ">
 
-<div style="text-align:center;">
-<div style="color:#9ca3af;">Best Aim</div>
-<div style="color:#ff4655;font-size:18px;">{best_aim}</div>
-</div>
+        <div style="color:#9ca3af;font-size:12px;">{row['Role']}</div>
+        <div style="color:white;font-size:16px;font-weight:bold;">{row['Player']}</div>
+        <div style="color:#ff4655;font-size:14px;">{row['Overall']:.2f}</div>
 
-</div>
-""", unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================================================
 # PLAYER
