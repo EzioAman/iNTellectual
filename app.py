@@ -268,15 +268,32 @@ def fetch_tracker_stats(riot_id):
         
             queue = str(metadata.get("queue", "")).lower()
             season = str(metadata.get("season", "")).lower()
-            # only competitive matches
+        
+            # only competitive
             if "competitive" not in queue:
                 continue
-            # match current act
-            if season != str(current_act).lower():
+        
+            # skip if season missing
+            if not season:
                 continue
+        
+            # ACT match (robust compare)
+            if current_act.lower() not in season:
+                continue
+        
             filtered_matches.append(m)
-
-        # limit to last 20 matches
+        
+        # fallback if empty (IMPORTANT)
+        if not filtered_matches:
+            # fallback: just take competitive matches (no act filter)
+            for m in matches:
+                metadata = m.get("metadata", {})
+                queue = str(metadata.get("queue", "")).lower()
+        
+                if "competitive" in queue:
+                    filtered_matches.append(m)
+        
+        # limit
         matches = filtered_matches[:20]
         
         
