@@ -618,7 +618,7 @@ AGENT_IMAGES = {
 "breach":"https://media.valorant-api.com/agents/5f8d3a7f-467b-97f3-062c-13acf203c006/displayicon.png",
 "skye":"https://media.valorant-api.com/agents/6f2a04ca-43e0-be17-7f36-b3908627744d/displayicon.png",
 "kay/o":"https://media.valorant-api.com/agents/601dbbe7-43ce-be57-2a40-4abd24953621/displayicon.png",
-"fade":"https://media.valorant-api.com/agents/d17320a9-4e19-b3d0-3cbb-3f6b8a4b98c3/displayicon.png",
+"fade":"https://media.valorant-api.com/agents/dade69b4-4f5a-8528-247b-219e5a1facd6/displayicon.png",
 "gekko":"https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png",
 
 # Sentinels
