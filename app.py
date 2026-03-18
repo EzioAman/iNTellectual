@@ -966,61 +966,65 @@ components.html(f"""
 <style>
 body {{
     margin:0;
-    padding:10px;
-    font-family: 'Teko', sans-serif;
-    background: transparent;
+    padding:12px;
+    font-family:'Teko',sans-serif;
+    background:transparent;
 }}
 
-/* ===== GRID ===== */
+/* ===== GRID (FIXED 3 PER ROW) ===== */
 .grid {{
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap:16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap:20px;
 }}
 
 /* ===== CARD ===== */
 .card {{
     display:flex;
-    gap:12px;
-    background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));
-    border:1px solid rgba(255,70,85,.5);
-    border-radius:10px;
-    padding:14px;
-    transition:0.2s;
+    gap:14px;
+    padding:16px;
+    border-radius:12px;
+    background:linear-gradient(135deg, rgba(255,70,85,.35), rgba(0,0,0,.95));
+    border:1px solid rgba(255,70,85,.6);
+    transition:0.25s;
+    min-height:110px;
 }}
 
 .card:hover {{
-    transform:scale(1.03);
-    box-shadow:0 0 20px rgba(255,70,85,.4);
+    transform:scale(1.04);
+    box-shadow:0 0 25px rgba(255,70,85,.5);
 }}
 
+/* ===== MVP BIG ===== */
 .mvp {{
+    grid-column: span 2;
     border:2px solid gold;
-    box-shadow:0 0 20px gold;
+    box-shadow:0 0 25px gold;
 }}
 
 /* ===== IMAGE ===== */
 .card img {{
-    width:60px;
-    height:60px;
+    width:70px;
+    height:70px;
     border-radius:8px;
 }}
 
-/* ===== HEADER ===== */
+/* ===== TEXT ===== */
 .name {{
-    font-size:16px;
+    font-size:18px;
     color:white;
 }}
 
 .rank {{
     color:#ff4655;
     font-size:13px;
+    font-weight:bold;
 }}
 
-/* ===== BADGE ===== */
+/* ===== BADGES ===== */
 .badge {{
-    padding:2px 6px;
-    border-radius:5px;
+    padding:3px 8px;
+    border-radius:6px;
     font-size:10px;
 }}
 
@@ -1030,30 +1034,29 @@ body {{
 .badge-sentinel {{background:#f59e0b;color:black;}}
 
 /* ===== STATS ===== */
-.stat-row {{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-}}
-
-.stat {{
-    background:rgba(255,255,255,0.05);
-    padding:4px 8px;
-    border-radius:5px;
-    font-size:11px;
+.stats {{
+    margin-top:6px;
+    font-size:13px;
+    color:#e5e7eb;
 }}
 
 .mvp-tag {{
     color:gold;
-    font-size:12px;
     margin-top:6px;
+    font-size:13px;
 }}
 </style>
 
 <div class="grid">
-{html_block.replace('card-anim', 'card')}
+{html_block
+    .replace('card-anim', 'card')
+    .replace('stat-row', 'stats')
+    .replace('stat-box','')
+    .replace('stat-label','')
+    .replace('stat-value','')
+}
 </div>
-""", height=600, scrolling=True)
+""", height=450)
 
 st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
