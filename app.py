@@ -276,8 +276,8 @@ def fetch_tracker_stats(riot_id):
                 continue
             filtered_matches.append(m)
 
-# limit to last 20 matches
-matches = filtered_matches[:20]
+        # limit to last 20 matches
+        matches = filtered_matches[:20]
         
         
         # ===== TOTAL ACCUMULATORS (UNCHANGED) =====
