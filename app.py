@@ -233,18 +233,49 @@ def fetch_tracker_stats(riot_id):
         player_puuid = account["puuid"]
         
         # ---------- GET CURRENT ACT ----------
-        act_url = "https://api.henrikdev.xyz/valorant/v1/seasons"
-        act_res = requests.get(act_url, headers=headers)
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=25"
+        r = requests.get(url, headers=headers)
         
-        if act_res.status_code != 200:
+        if r.status_code != 200:
             return None
         
-        acts = act_res.json()["data"]
+        matches = r.json()["data"]
         
+        # ===== DETECT CURRENT ACT FROM MATCHES =====
         current_act = None
-        for act in acts:
-            if act.get("isActive") and act.get("type") == "act":
-                current_act = act["id"]
+        
+        for m in matches:
+            metadata = m.get("metadata", {})
+            season = metadata.get("season")
+        
+            if season:
+                current_act = str(season).lower()
+                break
+        
+        if not current_act:
+            return None
+        
+        # ===== FILTER COMP + SAME ACT =====
+        filtered_matches = []
+        
+        for m in matches:
+            metadata = m.get("metadata", {})
+        
+            queue = str(metadata.get("queue", "")).lower()
+            season = str(metadata.get("season", "")).lower()
+        
+            if "competitive" not in queue:
+                continue
+        
+            if season != current_act:
+                continue
+        
+            filtered_matches.append(m)
+        
+        if not filtered_matches:
+            return None
+        
+        matches = filtered_matches[:20]
                 break
         
         if not current_act:
