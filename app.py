@@ -877,43 +877,41 @@ def highlight_card(player, df, rank):
     agent = pdata["Agent"].iloc[-1] if "Agent" in pdata.columns else None
     img = agent_img(agent)
     
-    return f"""
-    <div class="card-anim {mvp_class}" style="
-        display:flex;
-        align-items:center;
-        gap:12px;
-        background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));
-        border:1px solid rgba(255,70,85,.5);
-        border-radius:10px;
-        padding:16px;
-        margin-bottom:15px;
+    return f"""<div class="card-anim {mvp_class}" style="
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));
+    border:1px solid rgba(255,70,85,.5);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:15px;
     ">
     
-        <img src="{img}" style="height:60px;border-radius:6px;">
-        
-        <div style="flex:1;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <b style="color:white">{player}</b>
-                    <span class="badge {role_class}">{role}</span>
-                </div>
-                <span style="color:#ff4655">#{rank} {tier}</span>
-            </div>
+    <img src="{img}" style="height:60px;border-radius:6px;">
     
-            <div style="margin-top:8px;color:#9ca3af;">
-                ⭐ {overall:.2f} | 🔥 {form:.2f}
-            </div>
-    
-            <div style="margin-top:8px;display:flex;gap:12px;">
-                <span>🎯 {hs:.1f}%</span>
-                <span>⚔ {kd:.2f}</span>
-            </div>
-    
-            {"<div style='margin-top:6px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}
+    <div style="flex:1;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <b style="color:white">{player}</b>
+            <span class="badge {role_class}">{role}</span>
         </div>
-    
+        <span style="color:#ff4655">#{rank} {tier}</span>
     </div>
-    """
+    
+    <div style="margin-top:8px;color:#9ca3af;">
+    ⭐ {overall:.2f} | 🔥 {form:.2f}
+    </div>
+    
+    <div style="margin-top:8px;display:flex;gap:12px;">
+    <span>🎯 {hs:.1f}%</span>
+    <span>⚔ {kd:.2f}</span>
+    </div>
+    
+    {"<div style='margin-top:6px;color:gold;font-weight:bold;'>🏆 MVP</div>" if rank==1 else ""}
+    </div>
+    
+    </div>"""
 
 st.markdown('<div class="card"><div class="section-title">Top Performers</div>',unsafe_allow_html=True)
 
