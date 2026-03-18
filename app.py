@@ -579,9 +579,6 @@ def final_score(row):
     return (coach * coach_weight) + (stat * stat_weight)
 
 norm["Overall"] = norm.apply(final_score,axis=1)
-team_avg = norm.groupby("Player")["Overall"].mean().mean()
-top_fragger = norm.groupby("Player")["KD"].mean().idxmax()
-best_aim = norm.groupby("Player")["HS%"].mean().idxmax()
 
 st.markdown(f"""
 <div style="
