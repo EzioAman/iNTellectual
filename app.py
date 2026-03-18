@@ -12,7 +12,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 API_KEY = st.secrets["API_KEY"]
 
-ACT_START_DATE = pd.Timestamp("2026-03-18 21:00:00", tz="UTC")  # <-- change this when new act starts
+ACT_START_DATE = pd.Timestamp("2026-03-18", tz="UTC")  # <-- change this when new act starts
 st.set_page_config(page_title="Game Drifters Valorant Team", layout="wide")
 pd.options.mode.chained_assignment = None
 
