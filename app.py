@@ -261,10 +261,23 @@ def fetch_tracker_stats(riot_id):
         matches = r.json()["data"]
         
         # ===== FILTER CURRENT ACT (KEY FIX) =====
-        matches = [
-            m for m in matches
-            if str(m.get("metadata", {}).get("season_id", "")).lower() == str(current_act).lower()
-        ]
+        filtered_matches = []
+
+        for m in matches:
+            metadata = m.get("metadata", {})
+        
+            queue = str(metadata.get("queue", "")).lower()
+            season = str(metadata.get("season", "")).lower()
+            # only competitive matches
+            if "competitive" not in queue:
+                continue
+            # match current act
+            if season != str(current_act).lower():
+                continue
+            filtered_matches.append(m)
+
+# limit to last 20 matches
+matches = filtered_matches[:20]
         
         
         # ===== TOTAL ACCUMULATORS (UNCHANGED) =====
