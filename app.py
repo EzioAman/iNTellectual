@@ -578,7 +578,181 @@ def final_score(row):
 
     return (coach * coach_weight) + (stat * stat_weight)
 
+# =========================================================
+# PLAYER CARD AND TEAM RANK
+# =========================================================
+
+def highlight_card(player, df, rank):
+
+    pdata = df[df["Player"] == player]
+    if pdata.empty:
+        return ""
+
+    overall = pdata["Overall"].mean()
+    form = pdata.tail(3)["Overall"].mean()
+
+    hs = pdata["HS%"].mean()
+    kd = pdata["KD"].mean()
+
+    role = pdata["Role"].iloc[-1] if "Role" in pdata.columns else ""
+    role_class = f"badge-{role.lower()}" if role else "badge"
+
+    tier = "S" if overall >= 9 else "A" if overall >= 8 else "B" if overall >= 7 else "C"
+    mvp_class = "mvp" if rank == 1 else ""
+
+    agent = pdata["Agent"].iloc[-1] if "Agent" in pdata.columns else None
+    img = agent_img(agent)
+
+    img_tag = f'<img src="{img}" style="height:70px;width:70px;border-radius:8px;object-fit:cover;">' if img else ""
+
+    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:12px;padding:18px;margin-bottom:15px;">
+    {img_tag}
+    <div style="flex:1;">
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:8px;">
+    <b style="color:white;font-size:18px;">{player}</b>
+    <span class="badge {role_class}">{role}</span>
+    </div>
+    <span style="color:#ff4655;font-weight:bold;">#{rank} {tier}</span>
+    </div>
+    
+    <div class="stat-row">
+    <div class="stat-box">
+    <span class="stat-label">Overall</span>
+    <span class="stat-value">{overall:.2f}</span>
+    </div>
+    
+    <div class="stat-box">
+    <span class="stat-label">Form</span>
+    <span class="stat-value">{form:.2f}</span>
+    </div>
+    </div>
+    
+    <div class="stat-row">
+    <div class="stat-box">
+    <span class="stat-label">HS%</span>
+    <span class="stat-value">{hs:.1f}%</span>
+    </div>
+    
+    <div class="stat-box">
+    <span class="stat-label">K/D</span>
+    <span class="stat-value">{kd:.2f}</span>
+    </div>
+    </div>
+    
+    {"<div class='mvp-tag'>MVP</div>" if rank==1 else ""}
+    
+    </div>
+    </div>"""
 norm["Overall"] = norm.apply(final_score,axis=1)
+# =========================
+# TOP PERFORMERS (GLOBAL)
+# =========================
+
+st.markdown('<div class="card"><div class="section-title">Top Performers</div>',unsafe_allow_html=True)
+top_players = norm.groupby("Player")["Overall"].mean().sort_values(ascending=False).head(5).index
+html_block = ""
+for i, p in enumerate(top_players, start=1):
+    html_block += highlight_card(p, norm, i)
+
+components.html(f"""
+<style>
+body {{
+    margin:0;
+    padding:12px;
+    font-family:'Teko',sans-serif;
+    background:transparent;
+}}
+
+/* ===== GRID (FIXED 3 PER ROW) ===== */
+.grid {{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:20px;
+}}
+
+/* ===== CARD ===== */
+.card {{
+    display:flex;
+    gap:14px;
+    padding:16px;
+    border-radius:12px;
+    background:linear-gradient(135deg, rgba(255,70,85,.35), rgba(0,0,0,.95));
+    border:1px solid rgba(255,70,85,.6);
+    transition:0.25s;
+    min-height:110px;
+}}
+
+.card:hover {{
+    transform:scale(1.04);
+    box-shadow:0 0 25px rgba(255,70,85,.5);
+}}
+
+/* ===== MVP BIG ===== */
+.mvp {{
+    grid-column: span 2;
+    border:2px solid gold;
+    box-shadow:0 0 25px gold;
+}}
+
+/* ===== IMAGE ===== */
+.card img {{
+    width:70px;
+    height:70px;
+    border-radius:8px;
+}}
+
+/* ===== TEXT ===== */
+.name {{
+    font-size:18px;
+    color:white;
+}}
+
+.rank {{
+    color:#ff4655;
+    font-size:13px;
+    font-weight:bold;
+}}
+
+/* ===== BADGES ===== */
+.badge {{
+    padding:3px 8px;
+    border-radius:6px;
+    font-size:10px;
+}}
+
+.badge-duelist {{background:#ff4655;color:white;}}
+.badge-controller {{background:#3b82f6;color:white;}}
+.badge-initiator {{background:#10b981;color:white;}}
+.badge-sentinel {{background:#f59e0b;color:black;}}
+
+/* ===== STATS ===== */
+.stats {{
+    margin-top:6px;
+    font-size:13px;
+    color:#e5e7eb;
+}}
+
+.mvp-tag {{
+    color:gold;
+    margin-top:6px;
+    font-size:13px;
+}}
+</style>
+
+<div class="grid">
+{html_block
+    .replace('card-anim', 'card')
+    .replace('stat-row', 'stats')
+    .replace('stat-box','')
+    .replace('stat-label','')
+    .replace('stat-value','')
+}
+</div>
+""", height=450)
+
+st.markdown("</div>",unsafe_allow_html=True)
 role_best = (
     norm.groupby(["Role","Player"])["Overall"]
     .mean()
@@ -924,181 +1098,6 @@ def agent_img(agent):
     if pd.isna(agent): return ""
     return AGENT_IMAGES.get(str(agent).lower().strip(),"")
 
-
-# =========================================================
-# PLAYER CARD AND TEAM RANK
-# =========================================================
-
-def highlight_card(player, df, rank):
-
-    pdata = df[df["Player"] == player]
-    if pdata.empty:
-        return ""
-
-    overall = pdata["Overall"].mean()
-    form = pdata.tail(3)["Overall"].mean()
-
-    hs = pdata["HS%"].mean()
-    kd = pdata["KD"].mean()
-
-    role = pdata["Role"].iloc[-1] if "Role" in pdata.columns else ""
-    role_class = f"badge-{role.lower()}" if role else "badge"
-
-    tier = "S" if overall >= 9 else "A" if overall >= 8 else "B" if overall >= 7 else "C"
-    mvp_class = "mvp" if rank == 1 else ""
-
-    agent = pdata["Agent"].iloc[-1] if "Agent" in pdata.columns else None
-    img = agent_img(agent)
-
-    img_tag = f'<img src="{img}" style="height:70px;width:70px;border-radius:8px;object-fit:cover;">' if img else ""
-
-    return f"""<div class="card-anim {mvp_class}" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg, rgba(255,70,85,.25), rgba(0,0,0,.9));border:1px solid rgba(255,70,85,.5);border-radius:12px;padding:18px;margin-bottom:15px;">
-    {img_tag}
-    <div style="flex:1;">
-    
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-    <div style="display:flex;align-items:center;gap:8px;">
-    <b style="color:white;font-size:18px;">{player}</b>
-    <span class="badge {role_class}">{role}</span>
-    </div>
-    <span style="color:#ff4655;font-weight:bold;">#{rank} {tier}</span>
-    </div>
-    
-    <div class="stat-row">
-    <div class="stat-box">
-    <span class="stat-label">Overall</span>
-    <span class="stat-value">{overall:.2f}</span>
-    </div>
-    
-    <div class="stat-box">
-    <span class="stat-label">Form</span>
-    <span class="stat-value">{form:.2f}</span>
-    </div>
-    </div>
-    
-    <div class="stat-row">
-    <div class="stat-box">
-    <span class="stat-label">HS%</span>
-    <span class="stat-value">{hs:.1f}%</span>
-    </div>
-    
-    <div class="stat-box">
-    <span class="stat-label">K/D</span>
-    <span class="stat-value">{kd:.2f}</span>
-    </div>
-    </div>
-    
-    {"<div class='mvp-tag'>MVP</div>" if rank==1 else ""}
-    
-    </div>
-    </div>"""
-
-st.markdown('<div class="card"><div class="section-title">Top Performers</div>',unsafe_allow_html=True)
-
-top_players = norm.groupby("Player")["Overall"].mean().sort_values(ascending=False).head(5).index
-
-html_block = ""
-
-for i, p in enumerate(top_players, start=1):
-    html_block += highlight_card(p, norm, i)
-
-components.html(f"""
-<style>
-body {{
-    margin:0;
-    padding:12px;
-    font-family:'Teko',sans-serif;
-    background:transparent;
-}}
-
-/* ===== GRID (FIXED 3 PER ROW) ===== */
-.grid {{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:20px;
-}}
-
-/* ===== CARD ===== */
-.card {{
-    display:flex;
-    gap:14px;
-    padding:16px;
-    border-radius:12px;
-    background:linear-gradient(135deg, rgba(255,70,85,.35), rgba(0,0,0,.95));
-    border:1px solid rgba(255,70,85,.6);
-    transition:0.25s;
-    min-height:110px;
-}}
-
-.card:hover {{
-    transform:scale(1.04);
-    box-shadow:0 0 25px rgba(255,70,85,.5);
-}}
-
-/* ===== MVP BIG ===== */
-.mvp {{
-    grid-column: span 2;
-    border:2px solid gold;
-    box-shadow:0 0 25px gold;
-}}
-
-/* ===== IMAGE ===== */
-.card img {{
-    width:70px;
-    height:70px;
-    border-radius:8px;
-}}
-
-/* ===== TEXT ===== */
-.name {{
-    font-size:18px;
-    color:white;
-}}
-
-.rank {{
-    color:#ff4655;
-    font-size:13px;
-    font-weight:bold;
-}}
-
-/* ===== BADGES ===== */
-.badge {{
-    padding:3px 8px;
-    border-radius:6px;
-    font-size:10px;
-}}
-
-.badge-duelist {{background:#ff4655;color:white;}}
-.badge-controller {{background:#3b82f6;color:white;}}
-.badge-initiator {{background:#10b981;color:white;}}
-.badge-sentinel {{background:#f59e0b;color:black;}}
-
-/* ===== STATS ===== */
-.stats {{
-    margin-top:6px;
-    font-size:13px;
-    color:#e5e7eb;
-}}
-
-.mvp-tag {{
-    color:gold;
-    margin-top:6px;
-    font-size:13px;
-}}
-</style>
-
-<div class="grid">
-{html_block
-    .replace('card-anim', 'card')
-    .replace('stat-row', 'stats')
-    .replace('stat-box','')
-    .replace('stat-label','')
-    .replace('stat-value','')
-}
-</div>
-""", height=450)
-
-st.markdown("</div>",unsafe_allow_html=True)
 st.markdown('<div class="card"><div class="section-title">Team Rankings</div>',unsafe_allow_html=True)
 
 rank=norm.groupby("Player")["Overall"].mean().sort_values(ascending=False)
