@@ -214,14 +214,10 @@ def fetch_tracker_stats(riot_id):
         if acc.status_code != 200:
             return None
 
-        acc_json = acc.json()
-        account = acc_json.get("data")
+        account = acc.json()["data"]
 
-        # 🔴 FIX 1: handle None safely
-        if not account:
-            return None
-
-        region_raw = str(account.get("region", "")).lower()
+        # ===== REGION FIX =====
+        region_raw = str(account.get("region","")).lower()
 
         REGION_MAP = {
             "ap": "ap",
@@ -233,60 +229,65 @@ def fetch_tracker_stats(riot_id):
         }
 
         region = REGION_MAP.get(region_raw, "ap")
-        player_puuid = account.get("puuid")
 
-        if not player_puuid:
-            return None
+        player_puuid = account["puuid"]
 
         # ---------- GET MATCHES ----------
+        url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}"
         url = f"https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/{region}/{player_puuid}?mode=competitive&size=20"
         r = requests.get(url, headers=headers)
 
         if r.status_code != 200:
             return None
 
-        r_json = r.json()
-        matches = r_json.get("data")
-
-        # 🔴 FIX 2: handle None matches
-        if not matches:
-            return None
+        matches = r.json()["data"]
 
         # ===== TOTAL ACCUMULATORS =====
-        total_kills = total_deaths = total_assists = 0
-        total_headshots = total_shots = 0
-        total_score = total_rounds = 0
+        total_kills = 0
+        total_deaths = 0
+        total_assists = 0
+        total_headshots = 0
+        total_shots = 0
+        total_score = 0
+        total_rounds = 0
         competitive_games = 0
 
         for match in matches:
 
-            metadata = match.get("metadata", {})
+            metadata = match["metadata"]
+
             queue = str(metadata.get("queue", "")).lower()
             mode  = str(metadata.get("mode", "")).lower()
 
+            # skip obvious non-competitive modes
             if any(x in (queue + mode) for x in [
-                "deathmatch","swift","spike","escalation","replication","snowball","custom"
+                "deathmatch",
+                "swift",
+                "spike",
+                "escalation",
+                "replication",
+                "snowball",
+                "custom"
             ]):
                 continue
 
             rounds = max(1, metadata.get("rounds_played", 1))
 
-            players = match.get("players", {}).get("all_players", [])
+            for p in match["players"]["all_players"]:
 
-            for p in players:
                 if p.get("puuid") != player_puuid:
                     continue
 
-                stats = p.get("stats", {})
+                stats = p["stats"]
 
-                kills   = stats.get("kills", 0)
-                deaths  = stats.get("deaths", 0)
-                assists = stats.get("assists", 0)
+                kills   = stats["kills"]
+                deaths  = stats["deaths"]
+                assists = stats["assists"]
                 damage  = stats.get("damage_made", 0)
 
-                headshots = stats.get("headshots", 0)
-                body      = stats.get("bodyshots", 0)
-                legs      = stats.get("legshots", 0)
+                headshots = stats["headshots"]
+                body      = stats["bodyshots"]
+                legs      = stats["legshots"]
 
                 total_kills += kills
                 total_deaths += deaths
@@ -307,6 +308,8 @@ def fetch_tracker_stats(riot_id):
         if competitive_games == 0:
             return None
 
+
+        # ===== FINAL STATS =====
         KD  = total_kills / max(1, total_deaths)
         ACS = total_score / max(1, total_rounds)
         HS  = (total_headshots / max(1, total_shots)) * 100
@@ -318,7 +321,7 @@ def fetch_tracker_stats(riot_id):
         }
 
     except Exception as e:
-        st.error(f"{riot_id} → {e}")
+        st.error(e)
         return None
 
 # =========================================================
@@ -1115,4 +1118,3 @@ for i,(p,row) in enumerate(rank.iterrows(),1):
     """,unsafe_allow_html=True)
 
 st.markdown("</div>",unsafe_allow_html=True)
-
