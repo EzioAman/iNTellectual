@@ -577,7 +577,7 @@ AGENT_IMAGES = {
 "phoenix":"https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/displayicon.png",
 "yoru":"https://media.valorant-api.com/agents/7f94d92c-4234-0a36-9646-3a87eb8b5c89/displayicon.png",
 "neon":"https://media.valorant-api.com/agents/bb2a4828-46eb-8cd1-e765-15848195d751/displayicon.png",
-"iso":"https://media.valorant-api.com/agents/0e38b510-41a8-5780-9b3a-90a9f4f8b1ff/displayicon.png",
+"iso":"https://media.valorant-api.com/agents/0e38b510-41a8-5780-5e8f-568b2a4f2d6c/displayicon.png",
 "waylay":"https://media.valorant-api.com/agents/df1cb487-4902-002e-5c17-d28e83e78588/displayicon.png",
 
 # Controllers
