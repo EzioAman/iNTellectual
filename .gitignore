@@ -1,0 +1,52 @@
+# Streamlit secrets (DO NOT COMMIT SENSITIVE CREDENTIALS)
+.streamlit/secrets.toml
+
+# Next.js / Node
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environment variables
+.env
+.env*.local
+.env
+!.env.example
+
+# IDE / Editor folders
+.vscode/
+.idea/
+
+# OS specific files
+.DS_Store
+Thumbs.db

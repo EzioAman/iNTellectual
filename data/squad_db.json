@@ -1,0 +1,937 @@
+{
+  "players": [
+    {
+      "player": "JohnWick#0100",
+      "riotId": "JohnWick#0100",
+      "name": "JohnWick",
+      "tag": "#0100",
+      "role": "Duelist",
+      "agent": "Waylay",
+      "rawStats": {
+        "kd": 1.21,
+        "acs": 123.3,
+        "hsPercent": 31
+      },
+      "coachScores": {
+        "aim": 9,
+        "utility": 7,
+        "comms": 7.5,
+        "entry": 9.5,
+        "clutch": 7.5
+      },
+      "normalized": {
+        "aim": 10,
+        "utility": 10,
+        "comms": 10,
+        "entry": 9.5,
+        "clutch": 10,
+        "hs": 10,
+        "acs": 4.65,
+        "kd": 9.17,
+        "coachScore": 9.9,
+        "statScore": 7.94,
+        "overall": 9.12
+      },
+      "tier": "S",
+      "careerRating": 9.12,
+      "formRating": 9.1,
+      "consistencyRating": 8.9,
+      "impactRating": 9.2,
+      "rank": 1,
+      "lastEvaluated": "2026-09-08"
+    },
+    {
+      "player": "Horus九#ENEAD",
+      "riotId": "Horus九#ENEAD",
+      "name": "Horus九",
+      "tag": "#ENEAD",
+      "role": "Sentinel",
+      "agent": "Cypher",
+      "rawStats": {
+        "kd": 1.23,
+        "acs": 135.7,
+        "hsPercent": 22.6
+      },
+      "coachScores": {
+        "aim": 7,
+        "utility": 8,
+        "comms": 4.9,
+        "entry": 5.1,
+        "clutch": 8.5
+      },
+      "normalized": {
+        "aim": 9.33,
+        "utility": 9.41,
+        "comms": 6.13,
+        "entry": 9.27,
+        "clutch": 9.44,
+        "hs": 10,
+        "acs": 5.9,
+        "kd": 10,
+        "coachScore": 8.72,
+        "statScore": 8.63,
+        "overall": 8.69
+      },
+      "tier": "A",
+      "careerRating": 8.69,
+      "formRating": 8.8,
+      "consistencyRating": 9.4,
+      "impactRating": 8.7,
+      "rank": 2
+    },
+    {
+      "player": "Morfit#5534",
+      "riotId": "Morfit#5534",
+      "name": "Morfit",
+      "tag": "#5534",
+      "role": "IGL",
+      "agent": "Yoru",
+      "rawStats": {
+        "kd": 0.96,
+        "acs": 122.6,
+        "hsPercent": 23
+      },
+      "coachScores": {
+        "aim": 6,
+        "utility": 6.8,
+        "comms": 8.3,
+        "entry": 5.5,
+        "clutch": 8
+      },
+      "normalized": {
+        "aim": 8.57,
+        "utility": 8.5,
+        "comms": 8.3,
+        "entry": 8.46,
+        "clutch": 8.42,
+        "hs": 10,
+        "acs": 5.98,
+        "kd": 8.73,
+        "coachScore": 8.45,
+        "statScore": 8.24,
+        "overall": 8.4
+      },
+      "tier": "A",
+      "careerRating": 8.4,
+      "formRating": 8.5,
+      "consistencyRating": 8.7,
+      "impactRating": 8.6,
+      "rank": 3
+    },
+    {
+      "player": "kay why esss#1111",
+      "riotId": "kay why esss#1111",
+      "name": "kay why esss",
+      "tag": "#1111",
+      "role": "IGL",
+      "agent": "Clove",
+      "rawStats": {
+        "kd": 0.89,
+        "acs": 104.9,
+        "hsPercent": 27.4
+      },
+      "coachScores": {
+        "aim": 7,
+        "utility": 7,
+        "comms": 8,
+        "entry": 5,
+        "clutch": 7
+      },
+      "normalized": {
+        "aim": 10,
+        "utility": 8.75,
+        "comms": 8,
+        "entry": 7.69,
+        "clutch": 7.37,
+        "hs": 10,
+        "acs": 5.12,
+        "kd": 8.09,
+        "coachScore": 8.36,
+        "statScore": 7.74,
+        "overall": 8.21
+      },
+      "tier": "A",
+      "careerRating": 8.21,
+      "formRating": 8.1,
+      "consistencyRating": 8.4,
+      "impactRating": 8.2,
+      "rank": 4
+    },
+    {
+      "player": "Kanye West#ctrl",
+      "riotId": "Kanye West#ctrl",
+      "name": "Kanye West",
+      "tag": "#ctrl",
+      "role": "Sentinel",
+      "agent": "Chamber",
+      "rawStats": {
+        "kd": 1.02,
+        "acs": 117.6,
+        "hsPercent": 28.7
+      },
+      "coachScores": {
+        "aim": 6.5,
+        "utility": 7,
+        "comms": 7,
+        "entry": 4.1,
+        "clutch": 6.5
+      },
+      "normalized": {
+        "aim": 8.67,
+        "utility": 8.24,
+        "comms": 8.75,
+        "entry": 7.45,
+        "clutch": 7.22,
+        "hs": 10,
+        "acs": 5.11,
+        "kd": 8.5,
+        "coachScore": 8.07,
+        "statScore": 7.87,
+        "overall": 8.01
+      },
+      "tier": "A",
+      "careerRating": 8.01,
+      "formRating": 8.2,
+      "consistencyRating": 8,
+      "impactRating": 8.1,
+      "rank": 5
+    },
+    {
+      "player": "tr0n#savvy",
+      "riotId": "tr0n#savvy",
+      "name": "tr0n",
+      "tag": "#savvy",
+      "role": "Duelist",
+      "agent": "Jett",
+      "rawStats": {
+        "kd": 1.08,
+        "acs": 130.5,
+        "hsPercent": 21.2
+      },
+      "coachScores": {
+        "aim": 7,
+        "utility": 6,
+        "comms": 4,
+        "entry": 8,
+        "clutch": 8
+      },
+      "normalized": {
+        "aim": 7.78,
+        "utility": 9.23,
+        "comms": 5.71,
+        "entry": 8,
+        "clutch": 10,
+        "hs": 8.15,
+        "acs": 4.92,
+        "kd": 8.18,
+        "coachScore": 8.14,
+        "statScore": 7.09,
+        "overall": 7.72
+      },
+      "tier": "B",
+      "careerRating": 7.72,
+      "formRating": 7.8,
+      "consistencyRating": 7.5,
+      "impactRating": 7.9,
+      "rank": 6
+    },
+    {
+      "player": "AK 게이머#2312",
+      "riotId": "AK 게이머#2312",
+      "name": "AK 게이머",
+      "tag": "#2312",
+      "role": "IGL",
+      "agent": "Omen",
+      "rawStats": {
+        "kd": 1.5,
+        "acs": 155.3,
+        "hsPercent": 38.1
+      },
+      "coachScores": {
+        "aim": 5,
+        "utility": 5.3,
+        "comms": 6.8,
+        "entry": 4.6,
+        "clutch": 7.7
+      },
+      "normalized": {
+        "aim": 7.14,
+        "utility": 6.63,
+        "comms": 6.8,
+        "entry": 7.08,
+        "clutch": 8.11,
+        "hs": 10,
+        "acs": 7.58,
+        "kd": 10,
+        "coachScore": 7.15,
+        "statScore": 9.19,
+        "overall": 7.66
+      },
+      "tier": "B",
+      "careerRating": 7.66,
+      "formRating": 8,
+      "consistencyRating": 7.4,
+      "impactRating": 7.9,
+      "rank": 7
+    },
+    {
+      "player": "grammar#omgg",
+      "riotId": "grammar#omgg",
+      "name": "grammar",
+      "tag": "#omgg",
+      "role": "Initiator",
+      "agent": "Fade",
+      "rawStats": {
+        "kd": 1.07,
+        "acs": 121,
+        "hsPercent": 31.1
+      },
+      "coachScores": {
+        "aim": 8,
+        "utility": 6,
+        "comms": 2,
+        "entry": 5,
+        "clutch": 9
+      },
+      "normalized": {
+        "aim": 10,
+        "utility": 6.32,
+        "comms": 2.35,
+        "entry": 5.88,
+        "clutch": 10,
+        "hs": 10,
+        "acs": 5.15,
+        "kd": 8.77,
+        "coachScore": 6.91,
+        "statScore": 7.97,
+        "overall": 7.28
+      },
+      "tier": "B",
+      "careerRating": 7.28,
+      "formRating": 7.4,
+      "consistencyRating": 7.1,
+      "impactRating": 7.3,
+      "rank": 8
+    },
+    {
+      "player": "SH4D0W#3000",
+      "riotId": "SH4D0W#3000",
+      "name": "SH4D0W",
+      "tag": "#3000",
+      "role": "Initiator",
+      "agent": "Sova",
+      "rawStats": {
+        "kd": 1.19,
+        "acs": 142.4,
+        "hsPercent": 22.9
+      },
+      "coachScores": {
+        "aim": 5.1,
+        "utility": 5,
+        "comms": 3.5,
+        "entry": 3.3,
+        "clutch": 5.1
+      },
+      "normalized": {
+        "aim": 6.38,
+        "utility": 5.26,
+        "comms": 4.12,
+        "entry": 3.88,
+        "clutch": 6.38,
+        "hs": 9.96,
+        "acs": 6.06,
+        "kd": 9.75,
+        "coachScore": 5.2,
+        "statScore": 8.59,
+        "overall": 6.39
+      },
+      "tier": "C",
+      "careerRating": 6.39,
+      "formRating": 6.5,
+      "consistencyRating": 6.8,
+      "impactRating": 6.4,
+      "rank": 9
+    },
+    {
+      "player": "Nik#peace",
+      "riotId": "Nik#peace",
+      "name": "Nik",
+      "tag": "#peace",
+      "role": "Duelist",
+      "agent": "Reyna",
+      "rawStats": {
+        "kd": 1.01,
+        "acs": 133.5,
+        "hsPercent": 15.6
+      },
+      "coachScores": {
+        "aim": 6.1,
+        "utility": 3.1,
+        "comms": 5.2,
+        "entry": 5.6,
+        "clutch": 4.3
+      },
+      "normalized": {
+        "aim": 6.78,
+        "utility": 4.77,
+        "comms": 7.43,
+        "entry": 5.6,
+        "clutch": 5.73,
+        "hs": 6,
+        "acs": 5.04,
+        "kd": 7.65,
+        "coachScore": 6.06,
+        "statScore": 6.23,
+        "overall": 6.13
+      },
+      "tier": "C",
+      "careerRating": 6.13,
+      "formRating": 6,
+      "consistencyRating": 6.2,
+      "impactRating": 6.1,
+      "rank": 10
+    },
+    {
+      "player": "HarryPotty#Gyatt",
+      "riotId": "HarryPotty#Gyatt",
+      "name": "HarryPotty",
+      "tag": "#Gyatt",
+      "role": "Duelist",
+      "agent": "Reyna",
+      "rawStats": {
+        "kd": 0.92,
+        "acs": 117.9,
+        "hsPercent": 22.8
+      },
+      "coachScores": {
+        "aim": 7,
+        "utility": 3,
+        "comms": 2,
+        "entry": 4,
+        "clutch": 3
+      },
+      "normalized": {
+        "aim": 7.78,
+        "utility": 4.62,
+        "comms": 2.86,
+        "entry": 4,
+        "clutch": 4,
+        "hs": 8.77,
+        "acs": 4.45,
+        "kd": 6.97,
+        "coachScore": 4.65,
+        "statScore": 6.73,
+        "overall": 5.48
+      },
+      "tier": "C",
+      "careerRating": 5.48,
+      "formRating": 5.5,
+      "consistencyRating": 5.7,
+      "impactRating": 5.3,
+      "rank": 11
+    },
+    {
+      "player": "DLxIgPrime#1234",
+      "riotId": "DLxIgPrime#1234",
+      "name": "DLxIgPrime",
+      "tag": "#1234",
+      "role": "Duelist",
+      "agent": "Iso",
+      "rawStats": {
+        "kd": 1.21,
+        "acs": 145.1,
+        "hsPercent": 20.4
+      },
+      "coachScores": {
+        "aim": 2.5,
+        "utility": 1.7,
+        "comms": 2,
+        "entry": 2,
+        "clutch": 5.6
+      },
+      "normalized": {
+        "aim": 2.78,
+        "utility": 2.62,
+        "comms": 2.86,
+        "entry": 2,
+        "clutch": 7.47,
+        "hs": 7.85,
+        "acs": 5.48,
+        "kd": 9.17,
+        "coachScore": 3.54,
+        "statScore": 7.5,
+        "overall": 5.12
+      },
+      "tier": "C",
+      "careerRating": 5.12,
+      "formRating": 5.2,
+      "consistencyRating": 5,
+      "impactRating": 5.1,
+      "rank": 12
+    },
+    {
+      "player": "Krico#SPRSH",
+      "riotId": "Krico#SPRSH",
+      "name": "Krico",
+      "tag": "#SPRSH",
+      "role": "Duelist",
+      "agent": "Raze",
+      "rawStats": {
+        "kd": 1.14,
+        "acs": 124.4,
+        "hsPercent": 28
+      },
+      "coachScores": {
+        "aim": 3.6,
+        "utility": 1.9,
+        "comms": 2,
+        "entry": 3.2,
+        "clutch": 1.5
+      },
+      "normalized": {
+        "aim": 4,
+        "utility": 2.92,
+        "comms": 2.86,
+        "entry": 3.2,
+        "clutch": 2,
+        "hs": 10,
+        "acs": 4.69,
+        "kd": 8.64,
+        "coachScore": 2.99,
+        "statScore": 7.78,
+        "overall": 4.91
+      },
+      "tier": "C",
+      "careerRating": 4.91,
+      "formRating": 5,
+      "consistencyRating": 4.8,
+      "impactRating": 4.9,
+      "rank": 13
+    }
+  ],
+  "history": [
+    {
+      "date": "24-07-2026",
+      "player": "JohnWick#0100",
+      "role": "Duelist",
+      "agent": "Waylay",
+      "aim": 9,
+      "utility": 7,
+      "comms": 7.5,
+      "entry": 9.5,
+      "clutch": 7.5,
+      "hs": 31,
+      "acs": 123.3,
+      "kd": 1.21,
+      "overall": 9.12
+    },
+    {
+      "date": "24-07-2026",
+      "player": "Horus九#ENEAD",
+      "role": "Sentinel",
+      "agent": "Cypher",
+      "aim": 7,
+      "utility": 8,
+      "comms": 4.9,
+      "entry": 5.1,
+      "clutch": 8.5,
+      "hs": 22.6,
+      "acs": 135.7,
+      "kd": 1.23,
+      "overall": 8.69
+    },
+    {
+      "date": "24-07-2026",
+      "player": "Morfit#5534",
+      "role": "IGL",
+      "agent": "Yoru",
+      "aim": 6,
+      "utility": 6.8,
+      "comms": 8.3,
+      "entry": 5.5,
+      "clutch": 8,
+      "hs": 23,
+      "acs": 122.6,
+      "kd": 0.96,
+      "overall": 8.4
+    },
+    {
+      "date": "24-07-2026",
+      "player": "kay why esss#1111",
+      "role": "IGL",
+      "agent": "Clove",
+      "aim": 7,
+      "utility": 7,
+      "comms": 8,
+      "entry": 5,
+      "clutch": 7,
+      "hs": 27.4,
+      "acs": 104.9,
+      "kd": 0.89,
+      "overall": 8.21
+    },
+    {
+      "date": "24-07-2026",
+      "player": "Kanye West#ctrl",
+      "role": "Sentinel",
+      "agent": "Chamber",
+      "aim": 6.5,
+      "utility": 7,
+      "comms": 7,
+      "entry": 4.1,
+      "clutch": 6.5,
+      "hs": 28.7,
+      "acs": 117.6,
+      "kd": 1.02,
+      "overall": 8.01
+    },
+    {
+      "date": "24-07-2026",
+      "player": "tr0n#savvy",
+      "role": "Duelist",
+      "agent": "Jett",
+      "aim": 7,
+      "utility": 6,
+      "comms": 4,
+      "entry": 8,
+      "clutch": 8,
+      "hs": 21.2,
+      "acs": 130.5,
+      "kd": 1.08,
+      "overall": 7.72
+    },
+    {
+      "date": "24-07-2026",
+      "player": "AK 게이머#2312",
+      "role": "IGL",
+      "agent": "Omen",
+      "aim": 5,
+      "utility": 5.3,
+      "comms": 6.8,
+      "entry": 4.6,
+      "clutch": 7.7,
+      "hs": 38.1,
+      "acs": 155.3,
+      "kd": 1.5,
+      "overall": 7.66
+    }
+  ],
+  "tactics": [
+    {
+      "id": "ascent",
+      "name": "ASCENT",
+      "imageUrl": "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt72e737c35582f3ef/5eb270138981e42e88a0e8d0/ascent-featured.png",
+      "winRate": 68.4,
+      "attackWinRate": 52,
+      "defenseWinRate": 74.5,
+      "metaComp": [
+        {
+          "role": "Duelist",
+          "agent": "Jett",
+          "assignedPlayer": "tr0n#savvy"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Sova",
+          "assignedPlayer": "SH4D0W#3000"
+        },
+        {
+          "role": "Initiator",
+          "agent": "KAY/O",
+          "assignedPlayer": "grammar#omgg"
+        },
+        {
+          "role": "Controller",
+          "agent": "Omen",
+          "assignedPlayer": "AK 게이머#2312"
+        },
+        {
+          "role": "Sentinel",
+          "agent": "Cypher",
+          "assignedPlayer": "Horus九#ENEAD"
+        }
+      ],
+      "keyCallouts": [
+        "Mid Courtyard control is mandatory for A/B splits",
+        "Tree room door close timing prevents fast flanks",
+        "B Main wallbang setups with Odin/Sova dart"
+      ],
+      "tacticalNotes": "Standard A-split default with heavy mid presence. Cypher anchors B solo while 4 contest Mid & A Lobby."
+    },
+    {
+      "id": "bind",
+      "name": "BIND",
+      "imageUrl": "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt89c74b8d73b22cf9/5eb2701222d3346d5cbe6f3a/bind-featured.png",
+      "winRate": 72,
+      "attackWinRate": 61.2,
+      "defenseWinRate": 66.8,
+      "metaComp": [
+        {
+          "role": "Duelist",
+          "agent": "Raze",
+          "assignedPlayer": "Krico#SPRSH"
+        },
+        {
+          "role": "Duelist",
+          "agent": "Yoru",
+          "assignedPlayer": "Morfit#5534"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Skye",
+          "assignedPlayer": "grammar#omgg"
+        },
+        {
+          "role": "Controller",
+          "agent": "Brimstone",
+          "assignedPlayer": "kay why esss#1111"
+        },
+        {
+          "role": "Sentinel",
+          "agent": "Cypher",
+          "assignedPlayer": "Horus九#ENEAD"
+        }
+      ],
+      "keyCallouts": [
+        "Teleporter fake executes create instant rotations",
+        "Hookah satchel clear into B site plant",
+        "Showers double flash crunch"
+      ],
+      "tacticalNotes": "Double Duelist explosive aggression. Fast TP plays to disrupt rotational timings."
+    },
+    {
+      "id": "haven",
+      "name": "HAVEN",
+      "imageUrl": "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt7e4f8d9cbb2e54d3/5eb2701322d3346d5cbe6f3e/haven-featured.png",
+      "winRate": 64.2,
+      "attackWinRate": 58,
+      "defenseWinRate": 62.1,
+      "metaComp": [
+        {
+          "role": "Duelist",
+          "agent": "Jett",
+          "assignedPlayer": "JohnWick#0100"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Fade",
+          "assignedPlayer": "grammar#omgg"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Breach",
+          "assignedPlayer": "SH4D0W#3000"
+        },
+        {
+          "role": "Controller",
+          "agent": "Omen",
+          "assignedPlayer": "AK 게이머#2312"
+        },
+        {
+          "role": "Sentinel",
+          "agent": "Killjoy",
+          "assignedPlayer": "Kanye West#ctrl"
+        }
+      ],
+      "keyCallouts": [
+        "Garage control determines C site anchor stability",
+        "A-Long operator denial via smoke/flash",
+        "B site default trap setups"
+      ],
+      "tacticalNotes": "3-Site map: heavy emphasis on Garage info gathering and fast rotates through Link."
+    },
+    {
+      "id": "lotus",
+      "name": "LOTUS",
+      "imageUrl": "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5c256038166c3c58/63bc7551061f5c6b9bb7c265/lotus-featured.png",
+      "winRate": 61.5,
+      "attackWinRate": 64,
+      "defenseWinRate": 54.2,
+      "metaComp": [
+        {
+          "role": "Duelist",
+          "agent": "Raze",
+          "assignedPlayer": "Krico#SPRSH"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Fade",
+          "assignedPlayer": "grammar#omgg"
+        },
+        {
+          "role": "Controller",
+          "agent": "Omen",
+          "assignedPlayer": "AK 게이머#2312"
+        },
+        {
+          "role": "Controller",
+          "agent": "Clove",
+          "assignedPlayer": "kay why esss#1111"
+        },
+        {
+          "role": "Sentinel",
+          "agent": "Killjoy",
+          "assignedPlayer": "Horus九#ENEAD"
+        }
+      ],
+      "keyCallouts": [
+        "A-Main revolving door audio cues",
+        "C-Mound early peek control",
+        "B site fast plants under smoke cover"
+      ],
+      "tacticalNotes": "Rotating doors enable aggressive retake pinches. Double controller setup provides map-wide smoke coverage."
+    },
+    {
+      "id": "sunset",
+      "name": "SUNSET",
+      "imageUrl": "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt6d5a1953e5e49cf9/64e83c27e26ce28be7a9b0c2/sunset-featured.png",
+      "winRate": 70,
+      "attackWinRate": 55.4,
+      "defenseWinRate": 72.8,
+      "metaComp": [
+        {
+          "role": "Duelist",
+          "agent": "Raze",
+          "assignedPlayer": "JohnWick#0100"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Fade",
+          "assignedPlayer": "grammar#omgg"
+        },
+        {
+          "role": "Initiator",
+          "agent": "Breach",
+          "assignedPlayer": "SH4D0W#3000"
+        },
+        {
+          "role": "Controller",
+          "agent": "Omen",
+          "assignedPlayer": "AK 게이머#2312"
+        },
+        {
+          "role": "Sentinel",
+          "agent": "Cypher",
+          "assignedPlayer": "Horus九#ENEAD"
+        }
+      ],
+      "keyCallouts": [
+        "Mid Courtyard tiles dictate map tempo",
+        "B Boba control allows flawless B-split",
+        "A Elbow aggressive flash peeks"
+      ],
+      "tacticalNotes": "Mid tiles fight is everything. Win mid, and both A and B sites become easy pinch executions."
+    }
+  ],
+  "metrics": {
+    "activePlayers": 13,
+    "avgAcs": 128.8,
+    "avgKd": 1.11,
+    "avgHs": 25.6,
+    "mvpPlayer": "JohnWick#0100",
+    "mvpScore": 9.12,
+    "topRole": "Duelist",
+    "actStartDate": "2026-03-18"
+  },
+  "lastSync": "2026-09-09T01:30:00Z",
+  "coaches": [
+    {
+      "id": "coach-1",
+      "name": "Morfit",
+      "email": "morfit@intellectual.gg",
+      "title": "Head Strategic Coach & Architect",
+      "specialization": "Head Coach",
+      "assignedPlayers": [
+        "JohnWick#0100",
+        "Morfit#5534",
+        "Horus九#ENEAD"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLogin": "2026-09-09"
+    }
+  ],
+  "teamProfile": {
+    "teamName": "iNTellectual",
+    "teamTag": "iNT",
+    "region": "SA",
+    "owner": "Morfit",
+    "headCoach": "Morfit",
+    "foundedYear": "2026",
+    "motto": "No man left behind."
+  },
+  "users": [
+    {
+      "id": "user-super-admin",
+      "username": "morfit",
+      "email": "morfit@intellectual.gg",
+      "displayName": "Morfit (Platform Architect)",
+      "role": "SUPER_ADMIN",
+      "passwordHash": "c75829d78d66433eda9d05cef8e85b6dc791766da7ccb80be862394c1891a4ea3b74c8d8babefc0cc4de751e2efcc128c2d248c4142a1f5c6c0f0c228c054c04",
+      "salt": "55c67e4b17a5bde2d5be740101564ed5",
+      "createdAt": "2026-09-08T21:37:23.856Z",
+      "lastLogin": "2026-09-08T21:40:28.920Z",
+      "failedAttempts": 0,
+      "lockedUntil": null
+    },
+    {
+      "id": "user-coach-admin",
+      "username": "coach",
+      "email": "coach@intellectual.gg",
+      "displayName": "Head Coach",
+      "role": "ADMIN",
+      "passwordHash": "3f51fe27be4f8e5abafee1d803e12a8a4cc0eb4bf5a929b62ec0c6585947023f24c0b524e7b0f13385a6ea13af91c025e3e1bd9abd9d0661ec3715a0ed35b216",
+      "salt": "441da3c93e5b6f688da2777f2255137c",
+      "createdAt": "2026-09-08T21:37:23.905Z",
+      "lastLogin": "2026-09-08T21:37:28.688Z",
+      "failedAttempts": 0,
+      "lockedUntil": null
+    },
+    {
+      "id": "user-d3ffe8222efcf47c",
+      "username": "TacticianOne",
+      "email": "tactician@squad.gg",
+      "displayName": "Captain Tactician",
+      "role": "USER",
+      "passwordHash": "404425c2f6644ccc8cfc06334e4c954e47099d6df655b9746db90f3fd99e4ef318dc88e86e3f5d4837465bb7c0728069f991451d9e1f55622a06883dc753542e",
+      "salt": "6340e6f1db8483fde45f97f0a7881c49",
+      "createdAt": "2026-09-08T21:37:24.015Z",
+      "lastLogin": "2026-09-08T21:37:24.121Z",
+      "failedAttempts": 0,
+      "lockedUntil": null
+    }
+  ],
+  "sessions": [
+    {
+      "token": "d602f302fa290b03b577bab9c92847691666a4c8b6e9b3bc673dba781f32b329",
+      "userId": "user-d3ffe8222efcf47c",
+      "username": "TacticianOne",
+      "role": "USER",
+      "expiresAt": "2026-09-10T21:37:24.015Z",
+      "createdAt": "2026-09-08T21:37:24.015Z"
+    },
+    {
+      "token": "5b35bde67a38fb1cea4fd0199e9f862197978b0045a5408babb5956fcd45f6a6",
+      "userId": "user-d3ffe8222efcf47c",
+      "username": "TacticianOne",
+      "role": "USER",
+      "expiresAt": "2026-09-10T21:37:24.121Z",
+      "createdAt": "2026-09-08T21:37:24.121Z"
+    },
+    {
+      "token": "ec79da1e105af1621b532a21c607b7ee213eb4dcef4f16f3f549b31e47c2861f",
+      "userId": "user-super-admin",
+      "username": "morfit",
+      "role": "SUPER_ADMIN",
+      "expiresAt": "2026-09-10T21:37:28.603Z",
+      "createdAt": "2026-09-08T21:37:28.603Z"
+    },
+    {
+      "token": "8abd8aa35cd5f447d55a9ac5379b2250c86cc84f70fbdeff194126a935238c5a",
+      "userId": "user-coach-admin",
+      "username": "coach",
+      "role": "ADMIN",
+      "expiresAt": "2026-09-10T21:37:28.688Z",
+      "createdAt": "2026-09-08T21:37:28.688Z"
+    }
+  ]
+}

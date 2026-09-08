@@ -1,0 +1,191 @@
+[
+  {
+    "id": "strat-1788902728357",
+    "title": "Lotus 3-Site Information Pressure [DRX (Korean Tactical Mastery)]",
+    "mapId": "lotus",
+    "side": "ATTACK",
+    "buyType": "FULL_BUY",
+    "author": "Squad IGL",
+    "createdAt": "2026-09-08",
+    "phase1": "Viper walls C-Mound. Fade eyes A-Rubble. Omen holds B-Core sightline.",
+    "phase2": "Activate revolving door to bait B-site defense. Flash through door and commit to A-Drop fast wrap.",
+    "phase3": "Plant A-Site behind rubble. Hold A-Drop and A-Main crossfire angles.",
+    "comp": [
+      {
+        "agent": "Viper",
+        "role": "Controller",
+        "note": "Wall Deployer"
+      },
+      {
+        "agent": "Fade",
+        "role": "Initiator",
+        "note": "A-Recon"
+      },
+      {
+        "agent": "Killjoy",
+        "role": "Sentinel",
+        "note": "Mid Anchor"
+      },
+      {
+        "agent": "Raze",
+        "role": "Duelist",
+        "note": "A-Hit Entry"
+      },
+      {
+        "agent": "Omen",
+        "role": "Controller",
+        "note": "Door Lurk"
+      }
+    ],
+    "utilityMarkers": [
+      {
+        "x": 28,
+        "y": 55,
+        "type": "WALL",
+        "label": "Viper Toxic Screen"
+      },
+      {
+        "x": 70,
+        "y": 36,
+        "type": "SMOKE",
+        "label": "A-Top Smoke"
+      },
+      {
+        "x": 68,
+        "y": 44,
+        "type": "SPIKE",
+        "label": "A-Site Plant"
+      }
+    ]
+  },
+  {
+    "id": "strat-1",
+    "title": "Ascent A-Split & Tree Pinch",
+    "mapId": "ascent",
+    "side": "ATTACK",
+    "buyType": "FULL_BUY",
+    "author": "Head Coach",
+    "createdAt": "2026-09-08",
+    "phase1": "Omen smokes Bottom Mid. Sova fires A-Main high recon dart.",
+    "phase2": "KAY/O flashes Mid Tree from Courtyard; Jett dashes into A-Tree to close door.",
+    "phase3": "Execute onto A site from both A-Main and A-Tree simultaneously. Cypher watches B-flank.",
+    "comp": [
+      {
+        "agent": "Jett",
+        "role": "Duelist",
+        "note": "Entry onto Site"
+      },
+      {
+        "agent": "Sova",
+        "role": "Initiator",
+        "note": "High A-Main Recon"
+      },
+      {
+        "agent": "Omen",
+        "role": "Controller",
+        "note": "Mid & Heaven Smokes"
+      },
+      {
+        "agent": "KAY/O",
+        "role": "Initiator",
+        "note": "Tree Flash"
+      },
+      {
+        "agent": "Cypher",
+        "role": "Sentinel",
+        "note": "Flank Trip in B-Main"
+      }
+    ],
+    "utilityMarkers": [
+      {
+        "x": 45,
+        "y": 55,
+        "type": "SMOKE",
+        "label": "Mid Bottom"
+      },
+      {
+        "x": 70,
+        "y": 35,
+        "type": "SMOKE",
+        "label": "A Heaven"
+      },
+      {
+        "x": 65,
+        "y": 60,
+        "type": "FLASH",
+        "label": "Tree Pop-Flash"
+      },
+      {
+        "x": 75,
+        "y": 45,
+        "type": "SPIKE",
+        "label": "Default Plant"
+      }
+    ]
+  },
+  {
+    "id": "strat-2",
+    "title": "Bind B-Site Hookah Crunch & TP Fake",
+    "mapId": "bind",
+    "side": "ATTACK",
+    "buyType": "FULL_BUY",
+    "author": "Tactical Analyst",
+    "createdAt": "2026-09-07",
+    "phase1": "Brimstone drops Stim Beacon outside B-Short. Fake noise in A-Showers.",
+    "phase2": "Raze double-satchels into Hookah window. Skye dog clears under Hookah.",
+    "phase3": "Brimstone smokes B-Elbow and CT spawn. Plant safe behind B-Site tube.",
+    "comp": [
+      {
+        "agent": "Raze",
+        "role": "Duelist",
+        "note": "Hookah Satchel Clear"
+      },
+      {
+        "agent": "Brimstone",
+        "role": "Controller",
+        "note": "CT & Elbow Smokes"
+      },
+      {
+        "agent": "Skye",
+        "role": "Initiator",
+        "note": "Flash & Info Dog"
+      },
+      {
+        "agent": "Cypher",
+        "role": "Sentinel",
+        "note": "A-Short Flank Anchor"
+      },
+      {
+        "agent": "Yoru",
+        "role": "Duelist",
+        "note": "Teleport Anchor"
+      }
+    ],
+    "utilityMarkers": [
+      {
+        "x": 35,
+        "y": 40,
+        "type": "SMOKE",
+        "label": "B Elbow"
+      },
+      {
+        "x": 45,
+        "y": 25,
+        "type": "SMOKE",
+        "label": "B CT"
+      },
+      {
+        "x": 30,
+        "y": 55,
+        "type": "FLASH",
+        "label": "Hookah Pop"
+      },
+      {
+        "x": 40,
+        "y": 45,
+        "type": "SPIKE",
+        "label": "Safe Tube Plant"
+      }
+    ]
+  }
+]
