@@ -1,5 +1,7 @@
 # ⚡ InTellectual — Tactical Esports Intelligence & Team Command Platform
 
+**Note: Uploaded with an example dataset**
+
 <div align="center">
 
 ![Next.js](https://img.shields.io/badge/Next.js-15.1-black?style=for-the-badge&logo=next.js)
